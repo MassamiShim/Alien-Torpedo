@@ -1,0 +1,56 @@
+﻿@model AlienTorpedoSite.ViewModels.Home.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<form asp-action="Login">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Para acessar nosso sistema, informe e-mail e senha:</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="Nm_email" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_email" class="form-control" placeholder="E-mail" />
+                        <span asp-validation-for="Nm_email" class="text-danger" />
+                    </div>
+                    <label asp-for="Nm_senha" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input type="password" asp-for="Nm_senha" class="form-control" placeholder="Senha" />
+                        <span asp-validation-for="Nm_senha" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div>
+                <input type="submit" class="btn btn-info" value="Acessar" />
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.Codigo == 0)
+    {
+        <div class="alert alert-success">
+            @ViewBag.Mensagem
+        </div>
+    }
+    
+    @if (ViewBag.Codigo == 1)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Mensagem
+        </div>
+    }
+
+</form>
+
+@section Scripts
+    {
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}

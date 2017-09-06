@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using AlienTorpedoSite.ViewModels.Home;
 
 namespace AlienTorpedoSite.Controllers
 {
@@ -24,6 +21,38 @@ namespace AlienTorpedoSite.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                //chamar API
+                //receber retorno e mostrar na tela
+                //redirecionar para outra tela, se sucesso
+
+                ViewBag.Mensagem = "Acesso liberado!";
+                ViewBag.Codigo = 0;
+            }
+            else
+            {
+                //erro
+                ViewBag.Mensagem = "Dados Invalidos!";
+                ViewBag.Codigo = 1;
+            }
+
+            return View(viewModel);
+        }
+
+        public IActionResult Cadastro()
+        {
             return View();
         }
 
