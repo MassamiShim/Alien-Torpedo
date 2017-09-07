@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,14 +33,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-controller="Home" asp-action="Index"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                    <li><a asp-controller="Home" asp-action="Contato"><span class="glyphicon glyphicon-pencil"></span> Contato</a></li>
-                    <li><a asp-controller="Home" asp-action="Sobre"><span class="glyphicon glyphicon-bookmark"></span> Sobre</a></li>
-                    
+                    <li><a asp-controller="Home" asp-action="Index" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                    <li><a asp-controller="Home" asp-action="Contato" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-pencil"></span> Contato</a></li>
+                    <li><a asp-controller="Home" asp-action="Sobre" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-bookmark"></span> Sobre</a></li>
+                    <li><a asp-controller="Eventos" asp-action="Eventos" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-asterisk"></span> Eventos</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-controller="Home" asp-action="Cadastro"><span class="glyphicon glyphicon-user"></span> Cadastre-se</a></li>
-                    <li><a asp-controller="Home" asp-action="Entrar"><span class="glyphicon glyphicon-log-in"></span> Entrar</a></li>
+                    <li><a asp-controller="Home" asp-action="Conta" asp-route-Cd_usuario="@ViewBag.Cd_usuario"><span class="glyphicon glyphicon-user"></span> Sua Conta</a></li>
+                    <li><a asp-controller="Home" asp-action="Sair"><span class="glyphicon glyphicon-log-in"></span> Sair</a></li>
                 </ul>
             </div>
         </div>
