@@ -7,6 +7,59 @@ namespace AlienTorpedoSite.Controllers
 {
     public class ContaController : Controller
     {
+        public IActionResult Cadastrar()
+        {
+            ViewData["Title"] = "Cadastro de Conta";
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Cadastrar(ContaViewModel contaViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                //atribuindo informações cadastradas ao objeto usuario
+                Usuario usuario = new Usuario
+                {
+                    Nm_email = contaViewModel.Nm_email,
+                    Nm_senha = contaViewModel.Nm_senha,
+                    Nm_usuario = contaViewModel.Nm_usuario,
+                    Dv_ativo = true,
+                    Dt_inclusao = DateTime.UtcNow //formato padrão
+                };
+
+                //Chamar API para cadastrar o usuário aqui e enviar os parametros necessários
+
+                //receber retorno e mostrar na tela
+                bool retorno_API = true;
+
+                //redirecionar para outra tela, se sucesso
+                if (retorno_API)
+                {
+                    //sucesso
+                    ViewBag.Mensagem = "Cadastro Realizado com sucesso!";
+                    ViewBag.Codigo = 0;
+
+                    //adicionar pop-up informando que o cadastro foi realizado com sucesso e somente depois redirecionar para a tela de login
+                    return RedirectToAction("Entrar");
+                }
+                else
+                {
+                    ViewBag.Mensagem = "Login não realizado!";
+                    ViewBag.Codigo = 1;
+                }
+            }
+            else
+            {
+                //erro
+                ViewBag.Mensagem = "Cadastro não está valido!";
+                ViewBag.Codigo = 1;
+            }
+
+            return View(contaViewModel);
+        }
+        
+
         public IActionResult Entrar()
         {
             ViewData["Title"] = "Entrar";
@@ -60,6 +113,7 @@ namespace AlienTorpedoSite.Controllers
             return View(entrarViewModel);
         }
         
+
         public IActionResult Detalhar(int Cd_usuario)
         {
             ViewData["Title"] = "Sua Conta";
@@ -80,59 +134,8 @@ namespace AlienTorpedoSite.Controllers
             ViewBag.Cd_usuario = Cd_usuario;
             return View(contaViewModel);
         }
-        
-        public IActionResult Cadastrar()
-        {
-            ViewData["Title"] = "Cadastro de Conta";
-            return View();
-        }
 
-        [HttpPost]
-        public IActionResult Cadastrar(ContaViewModel contaViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                //atribuindo informações cadastradas ao objeto usuario
-                Usuario usuario = new Usuario
-                {
-                    Nm_email = contaViewModel.Nm_email,
-                    Nm_senha = contaViewModel.Nm_senha,
-                    Nm_usuario = contaViewModel.Nm_usuario,
-                    Dv_ativo = true,
-                    Dt_inclusao = DateTime.UtcNow //formato padrão
-                };
 
-                //Chamar API para cadastrar o usuário aqui e enviar os parametros necessários
-
-                //receber retorno e mostrar na tela
-                bool retorno_API = true;
-
-                //redirecionar para outra tela, se sucesso
-                if (retorno_API)
-                {
-                    //sucesso
-                    ViewBag.Mensagem = "Cadastro Realizado com sucesso!";
-                    ViewBag.Codigo = 0;
-
-                    //adicionar pop-up informando que o cadastro foi realizado com sucesso e somente depois redirecionar para a tela de login
-                    return RedirectToAction("Entrar");
-                }
-                else
-                {
-                    ViewBag.Mensagem = "Login não realizado!";
-                    ViewBag.Codigo = 1;
-                }
-            }
-            else
-            {
-                //erro
-                ViewBag.Mensagem = "Cadastro não está valido!";
-                ViewBag.Codigo = 1;
-            }
-
-            return View(contaViewModel);
-        }
-        
         public IActionResult Editar(int Cd_usuario)
         {
             ViewData["Title"] = "Edição de Conta";
@@ -206,7 +209,30 @@ namespace AlienTorpedoSite.Controllers
 
             return View(contaViewModel);
         }
-        
+
+
+        public IActionResult Cancelar(int Cd_usuario)
+        {
+            //Chamar API para cancelar o usuário e passar parametros necessários
+
+            bool retorno_API = true;
+            //verificar retorno da API
+
+            if (retorno_API)
+            {
+                ViewBag.Mensagem = "Conta cancelada com sucesso!";
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Cd_codigo = 1;
+                ViewBag.Mensagem = "Erro no cancelamento da conta!";
+            }
+
+            return View();
+        }
+
+
         public IActionResult Sair()
         {
             return RedirectToAction("Index","Home");

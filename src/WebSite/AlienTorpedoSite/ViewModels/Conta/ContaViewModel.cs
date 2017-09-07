@@ -10,6 +10,7 @@ namespace AlienTorpedoSite.ViewModels.Conta
         public int Cd_usuario { get; set; }
         
         [Display(Name = "E-mail")]
+        [EmailAddress(ErrorMessage = "E-mail invalido!")]
         [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
         [StringLength(80, ErrorMessage = "O [{0}] deve conter no máximo 80 caracteres!")]
         public string Nm_email { get; set; }
