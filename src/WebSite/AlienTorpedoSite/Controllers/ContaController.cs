@@ -16,6 +16,8 @@ namespace AlienTorpedoSite.Controllers
         [HttpPost]
         public IActionResult Entrar(EntrarViewModel entrarViewModel)
         {
+            ViewData["Title"] = "Entrar";
+
             if (ModelState.IsValid)
             {
                 //chamar API aqui para validar o login 
@@ -57,9 +59,11 @@ namespace AlienTorpedoSite.Controllers
 
             return View(entrarViewModel);
         }
-
+        
         public IActionResult Detalhar(int Cd_usuario)
         {
+            ViewData["Title"] = "Sua Conta";
+
             //chamar API para receber dados do usuário solicitado
 
             //passando dados para a viewModel para em seguida ser apresentado em tela
@@ -76,10 +80,10 @@ namespace AlienTorpedoSite.Controllers
             ViewBag.Cd_usuario = Cd_usuario;
             return View(contaViewModel);
         }
-
+        
         public IActionResult Cadastrar()
         {
-            ViewData["Title"] = "Cadastro";
+            ViewData["Title"] = "Cadastro de Conta";
             return View();
         }
 
@@ -128,7 +132,81 @@ namespace AlienTorpedoSite.Controllers
 
             return View(contaViewModel);
         }
+        
+        public IActionResult Editar(int Cd_usuario)
+        {
+            ViewData["Title"] = "Edição de Conta";
 
+            //Chamar API para receber os dados do usuario
+
+            //Passar o retorno da API para o objeto ContaViewModel
+            ContaViewModel contaViewModel = new ContaViewModel
+            {
+                Cd_usuario = Cd_usuario,
+                Nm_email = "frank@gmail.com",
+                Nm_usuario = "Frank Wesley",
+                Nm_senha = "123",
+                Dv_ativo = true,
+                Dt_inclusao = DateTime.UtcNow
+            };
+
+            //verificando se retornou
+            if (contaViewModel == null)
+                return NotFound();
+
+            return View(contaViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(int Cd_usuario, ContaViewModel contaViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                //atribuindo informações editadas no objeto usuario
+                Usuario usuario = new Usuario
+                {
+                    Cd_usuario = contaViewModel.Cd_usuario,
+                    Nm_email = contaViewModel.Nm_email,
+                    Nm_senha = contaViewModel.Nm_senha,
+                    Nm_usuario = contaViewModel.Nm_usuario,
+                    Dv_ativo = contaViewModel.Dv_ativo,
+                    Dt_inclusao = contaViewModel.Dt_inclusao //formato padrão
+                };
+
+                //Chamar API para editar o usuário aqui e enviar os parametros necessários
+
+                //receber retorno e mostrar na tela
+                bool retorno_API = true;
+
+                //redirecionar para outra tela, se sucesso
+                if (retorno_API)
+                {
+                    //sucesso
+                    ViewBag.Mensagem = "Alterações realizadas com sucesso!";
+                    ViewBag.Codigo = 0;
+
+                    //adicionar pop-up informando que o cadastro foi realizado com sucesso e somente depois redirecionar para a tela de login
+                    return RedirectToAction("Detalhar", "Conta", new
+                    {
+                        Cd_usuario = usuario.Cd_usuario
+                    });
+                }
+                else
+                {
+                    ViewBag.Mensagem = "Alterações não realizadas!";
+                    ViewBag.Codigo = 1;
+                }
+            }
+            else
+            {
+                //erro
+                ViewBag.Mensagem = "Alterações não estão validas";
+                ViewBag.Codigo = 1;
+            }
+
+            return View(contaViewModel);
+        }
+        
         public IActionResult Sair()
         {
             return RedirectToAction("Index","Home");
