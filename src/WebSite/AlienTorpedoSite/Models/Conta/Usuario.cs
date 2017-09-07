@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AlienTorpedoSite.Models
+namespace AlienTorpedoSite.Models.Conta
 {
     public class Usuario
     {

@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">AlienTorpedoSite</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-Cd_usuario="@ViewBag.Cd_usuario" class="navbar-brand">AlienTorpedoSite</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -39,8 +39,8 @@
                     <li><a asp-controller="Eventos" asp-action="Eventos" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-asterisk"></span> Eventos</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-controller="Home" asp-action="Conta" asp-route-Cd_usuario="@ViewBag.Cd_usuario"><span class="glyphicon glyphicon-user"></span> Sua Conta</a></li>
-                    <li><a asp-controller="Home" asp-action="Sair"><span class="glyphicon glyphicon-log-in"></span> Sair</a></li>
+                    <li><a asp-controller="Conta" asp-action="Detalhar" asp-route-Cd_usuario="@ViewBag.Cd_usuario"><span class="glyphicon glyphicon-user"></span> Sua Conta</a></li>
+                    <li><a asp-controller="Conta" asp-action="Sair"><span class="glyphicon glyphicon-log-in"></span> Sair</a></li>
                 </ul>
             </div>
         </div>

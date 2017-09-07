@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AlienTorpedoSite.ViewModels.Home;
 
 namespace AlienTorpedoSite.Controllers
 {

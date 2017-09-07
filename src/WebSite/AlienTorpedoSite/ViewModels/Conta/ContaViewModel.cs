@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AlienTorpedoSite.ViewModels.Home
+namespace AlienTorpedoSite.ViewModels.Conta
 {
     public class ContaViewModel
     {
