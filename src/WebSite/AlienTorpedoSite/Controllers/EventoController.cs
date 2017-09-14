@@ -2,9 +2,9 @@
 
 namespace AlienTorpedoSite.Controllers
 {
-    public class EventosController : Controller
+    public class EventoController : Controller
     {
-        public IActionResult Eventos(int Cd_usuario = 0)
+        public IActionResult Detalhar(int Cd_usuario = 0)
         {
             if (Cd_usuario != 0)
                 ViewBag.Cd_usuario = Cd_usuario;
@@ -12,9 +12,13 @@ namespace AlienTorpedoSite.Controllers
             ViewData["Title"] = "Eventos";
             return View();
         }
-        
-        public IActionResult Error()
+
+        public IActionResult Cadastrar(int Cd_usuario = 0)
         {
+            if (Cd_usuario != 0)
+                ViewBag.Cd_usuario = Cd_usuario;
+
+            ViewData["Title"] = "Cadastrar Evento";
             return View();
         }
     }

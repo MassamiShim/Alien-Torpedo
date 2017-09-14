@@ -91,7 +91,7 @@ namespace AlienTorpedoSite.Controllers
                     ViewBag.Mensagem = "Acesso liberado!";
                     ViewBag.Codigo = 0;
 
-                    return RedirectToAction("Detalhar", "Conta", new
+                    return RedirectToAction("Index", "Home", new
                     {
                         Cd_usuario = usuario.Cd_usuario
                     });

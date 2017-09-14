@@ -36,7 +36,25 @@
                     <li><a asp-controller="Home" asp-action="Index" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-home"></span> Home</a></li>
                     <li><a asp-controller="Home" asp-action="Contato" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-pencil"></span> Contato</a></li>
                     <li><a asp-controller="Home" asp-action="Sobre" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-bookmark"></span> Sobre</a></li>
-                    <li><a asp-controller="Eventos" asp-action="Eventos" asp-route-Cd_usuario="@ViewBag.Cd_usuario" ><span class="glyphicon glyphicon-asterisk"></span> Eventos</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-user"></span> Grupos <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Grupo" asp-action="Cadastrar" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Cadastrar Grupo</a></li>
+                            <li><a asp-controller="Grupo" asp-action="Detalhar" asp-route-Cd_usuario="@ViewBag.Cd_usuario" >Gerenciar Grupo</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Grupo" asp-action="AtrelarEvento" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Atrelar Evento a um Grupo</a></li>
+                        </ul>
+                    </li>   
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-asterisk"></span> Eventos <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="TipoEvento" asp-action="Cadastrar" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Cadastrar Tipo de Evento</a></li>
+                            <li><a asp-controller="TipoEvento" asp-action="Detalhar" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Gerenciar Tipos de Evento</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Evento" asp-action="Cadastrar" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Cadastrar Evento</a></li>
+                            <li><a asp-controller="Evento" asp-action="Detalhar" asp-route-Cd_usuario="@ViewBag.Cd_usuario">Gerenciar Eventos</a></li>
+                        </ul>
+                    </li>   
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a asp-controller="Conta" asp-action="Detalhar" asp-route-Cd_usuario="@ViewBag.Cd_usuario"><span class="glyphicon glyphicon-user"></span> Sua Conta</a></li>
