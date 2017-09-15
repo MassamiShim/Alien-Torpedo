@@ -1,32 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace AlienTorpedoSite.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int Cd_usuario = 0)
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+            if (Cd_usuario != 0)
+                ViewBag.Cd_usuario = Cd_usuario;
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Sobre(int Cd_usuario = 0)
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Sobre";
+            ViewData["Message"] = "Sobre nosso sistema:";
+
+            if (Cd_usuario != 0)
+                ViewBag.Cd_usuario = Cd_usuario;
 
             return View();
         }
 
+        public IActionResult Contato(int Cd_usuario = 0)
+        {
+            ViewData["Title"] = "Contato";
+            ViewData["Message"] = "Entre em contato conosco:";
+
+            if (Cd_usuario != 0)
+                ViewBag.Cd_usuario = Cd_usuario;
+
+            return View();
+        }
+        
         public IActionResult Error()
         {
             return View();

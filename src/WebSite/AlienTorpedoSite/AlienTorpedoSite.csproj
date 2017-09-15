@@ -22,7 +22,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="ViewModels\Evento\" />
+    <Folder Include="ViewModels\TipoEvento\" />
   </ItemGroup>
 
 </Project>
