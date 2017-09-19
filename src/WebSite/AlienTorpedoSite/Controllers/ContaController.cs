@@ -2,6 +2,9 @@
 using AlienTorpedoSite.ViewModels.Conta;
 using AlienTorpedoSite.Models.Conta;
 using System;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace AlienTorpedoSite.Controllers
 {
@@ -10,6 +13,7 @@ namespace AlienTorpedoSite.Controllers
         public IActionResult Cadastrar()
         {
             ViewData["Title"] = "Cadastro de Conta";
+
             return View();
         }
 
@@ -18,35 +22,52 @@ namespace AlienTorpedoSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                //atribuindo informações cadastradas ao objeto usuario
-                Usuario usuario = new Usuario
+                try
                 {
-                    Nm_email = contaViewModel.Nm_email,
-                    Nm_senha = contaViewModel.Nm_senha,
-                    Nm_usuario = contaViewModel.Nm_usuario,
-                    Dv_ativo = true,
-                    Dt_inclusao = DateTime.UtcNow //formato padrão
-                };
+                    //atribuindo informações cadastradas ao objeto usuario
+                    Usuario usuario = new Usuario
+                    {
+                        NmEmail = contaViewModel.Nm_email,
+                        NmSenha = contaViewModel.Nm_senha,
+                        NmUsuario = contaViewModel.Nm_usuario,
+                        DvAtivo = true,
+                        DtInclusao = DateTime.UtcNow //formato padrão
+                    };
 
-                //Chamar API para cadastrar o usuário aqui e enviar os parametros necessários
+                    //Chamando API para cadastrar o usuário na base 
+                    using (HttpClient client = new HttpClient())
+                    {
+                        //Setando endereço da API
+                        client.BaseAddress = new System.Uri("http://localhost:65338/api/Usuario/CadastraUsuario");
+                        //Limpando header
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        //Adicionando um novo header do tipo JSON
+                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                //receber retorno e mostrar na tela
-                bool retorno_API = true;
+                        //Transformando obj Usuario em uma string
+                        string stringData = JsonConvert.SerializeObject(usuario);
 
-                //redirecionar para outra tela, se sucesso
-                if (retorno_API)
-                {
-                    //sucesso
-                    ViewBag.Mensagem = "Cadastro Realizado com sucesso!";
-                    ViewBag.Codigo = 0;
+                        //Transformando string em um arquivo do tipo JSON
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
 
-                    //adicionar pop-up informando que o cadastro foi realizado com sucesso e somente depois redirecionar para a tela de login
-                    return RedirectToAction("Entrar");
+                        //Chamando API passando o arquivo JSON
+                        HttpResponseMessage response = client.PostAsync("http://localhost:65338/api/Usuario/CadastraUsuario", contentData).Result;
+
+                        //Passando retorno da API para uma string
+                        string retorno = response.Content.ReadAsStringAsync().Result;
+
+                        //Fragmentando retorno do arquivo json 
+                        dynamic resultado = JsonConvert.DeserializeObject(retorno);
+
+                        //Enviando retorno para a tela
+                        ViewBag.Mensagem = resultado.mensagem.ToString();
+                        ViewBag.Codigo = Int32.Parse(resultado.cdretorno.ToString());
+                        
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ViewBag.Mensagem = "Login não realizado!";
-                    ViewBag.Codigo = 1;
+                    return RedirectToAction("Error", "Home", new { msg = ex.InnerException.ToString() });
                 }
             }
             else
@@ -59,7 +80,7 @@ namespace AlienTorpedoSite.Controllers
             return View(contaViewModel);
         }
         
-
+        
         public IActionResult Entrar()
         {
             ViewData["Title"] = "Entrar";
@@ -73,28 +94,25 @@ namespace AlienTorpedoSite.Controllers
 
             if (ModelState.IsValid)
             {
-                //chamar API aqui para validar o login 
+                //chamar API aqui para validar o login e receber dados do usuário
 
-                //receber retorno da API
+                Usuario usuario = new Usuario { DvAtivo = true };//retorno da api
 
-                //recebendo dados da API e redirecionando para a tela Conta
-                Usuario usuario = new Usuario
-                {
-                    //alterar aqui embaixo para receber os dados da API
-                    Cd_usuario = 1,
-                    Dv_ativo = true,
-                };
+                //armazenando dados do usuário em sessão
+                HttpContext.Session.SetString("Cd_usuario", "4");
+                HttpContext.Session.SetString("Nm_usuario", "Frank Wesley");
+                HttpContext.Session.SetString("Nm_email", "frank@gmail.com");
+                HttpContext.Session.SetString("Nm_senha", "123");
+                HttpContext.Session.SetString("Dv_ativo", "true");
+                HttpContext.Session.SetString("Dt_inclusao", DateTime.UtcNow.ToString());
 
                 //redirecionar para outra tela, se sucesso
-                if (usuario.Dv_ativo == true)
+                if (usuario.DvAtivo == true)
                 {
                     ViewBag.Mensagem = "Acesso liberado!";
                     ViewBag.Codigo = 0;
 
-                    return RedirectToAction("Index", "Home", new
-                    {
-                        Cd_usuario = usuario.Cd_usuario
-                    });
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -123,11 +141,11 @@ namespace AlienTorpedoSite.Controllers
             //passando dados para a viewModel para em seguida ser apresentado em tela
             ContaViewModel contaViewModel = new ContaViewModel
             {
-                Cd_usuario = Cd_usuario,
-                Nm_email = "frank@gmail.com",
-                Nm_usuario = "Frank Wesley",
-                Dv_ativo = true,
-                Dt_inclusao = DateTime.UtcNow
+                Cd_usuario = Int32.Parse(HttpContext.Session.GetString("Cd_usuario")),
+                Nm_email = HttpContext.Session.GetString("Nm_email"),
+                Nm_usuario = HttpContext.Session.GetString("Nm_usuario"),
+                Dv_ativo = bool.Parse(HttpContext.Session.GetString("Dv_ativo")),
+                Dt_inclusao = DateTime.Parse(HttpContext.Session.GetString("Dt_inclusao"))
             };
 
             ViewData["Title"] = "Sua Conta";
@@ -145,10 +163,10 @@ namespace AlienTorpedoSite.Controllers
             //Passar o retorno da API para o objeto ContaViewModel
             ContaViewModel contaViewModel = new ContaViewModel
             {
-                Cd_usuario = Cd_usuario,
+                Cd_usuario = 4,
                 Nm_email = "frank@gmail.com",
-                Nm_usuario = "Frank Wesley",
-                Nm_senha = "123",
+                Nm_usuario = "frank",
+                Nm_senha = "wesley",
                 Dv_ativo = true,
                 Dt_inclusao = DateTime.UtcNow
             };
@@ -165,45 +183,53 @@ namespace AlienTorpedoSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                //atribuindo informações editadas no objeto usuario
-                Usuario usuario = new Usuario
+                try
                 {
-                    Cd_usuario = contaViewModel.Cd_usuario,
-                    Nm_email = contaViewModel.Nm_email,
-                    Nm_senha = contaViewModel.Nm_senha,
-                    Nm_usuario = contaViewModel.Nm_usuario,
-                    Dv_ativo = contaViewModel.Dv_ativo,
-                    Dt_inclusao = contaViewModel.Dt_inclusao //formato padrão
-                };
-
-                //Chamar API para editar o usuário aqui e enviar os parametros necessários
-
-                //receber retorno e mostrar na tela
-                bool retorno_API = true;
-
-                //redirecionar para outra tela, se sucesso
-                if (retorno_API)
-                {
-                    //sucesso
-                    ViewBag.Mensagem = "Alterações realizadas com sucesso!";
-                    ViewBag.Codigo = 0;
-
-                    //adicionar pop-up informando que o cadastro foi realizado com sucesso e somente depois redirecionar para a tela de login
-                    return RedirectToAction("Detalhar", "Conta", new
+                    //atribuindo informações editadas no objeto usuario
+                    Usuario usuario = new Usuario
                     {
-                        Cd_usuario = usuario.Cd_usuario
-                    });
+                        CdUsuario = contaViewModel.Cd_usuario,
+                        NmEmail = contaViewModel.Nm_email,
+                        NmSenha = contaViewModel.Nm_senha,
+                        NmUsuario = contaViewModel.Nm_usuario,
+                        DvAtivo = contaViewModel.Dv_ativo
+                    };
+
+                    //Chamando API para aplicar as alterações no usuário
+                    using (HttpClient client = new HttpClient())
+                    {
+                        client.BaseAddress = new System.Uri("http://localhost:65338/api/Usuario/EditaUsuario");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        
+                        string stringData = JsonConvert.SerializeObject(usuario);
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+
+                        //Chamando API passando o arquivo JSON                                              
+                        HttpResponseMessage response = client.PutAsync("http://localhost:65338/api/Usuario/EditaUsuario", contentData).Result;
+
+                        //Passando retorno da API para uma string
+                        string retorno = response.Content.ReadAsStringAsync().Result;
+                        dynamic resultado = JsonConvert.DeserializeObject(retorno);
+
+                        //Enviando retorno para a tela
+                        ViewBag.Mensagem = resultado.mensagem.ToString();
+                        ViewBag.Codigo = Int32.Parse(resultado.cdretorno.ToString());
+
+                        if (ViewBag.Codigo == 0)
+                            return RedirectToAction("Detalhar"); //colocar pop-up aqui informando a msg
+
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ViewBag.Mensagem = "Alterações não realizadas!";
-                    ViewBag.Codigo = 1;
+                    return RedirectToAction("Error", "Home", new { msg = ex.InnerException.ToString() });
                 }
             }
             else
             {
                 //erro
-                ViewBag.Mensagem = "Alterações não estão validas";
+                ViewBag.Mensagem = "Alterações não estão validas!";
                 ViewBag.Codigo = 1;
             }
 
@@ -220,8 +246,11 @@ namespace AlienTorpedoSite.Controllers
 
             if (retorno_API)
             {
+                //Limpando sessão atual
+                HttpContext.Session.Clear();
+
                 ViewBag.Mensagem = "Conta cancelada com sucesso!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Entrar", "Conta");
             }
             else
             {
@@ -235,7 +264,9 @@ namespace AlienTorpedoSite.Controllers
 
         public IActionResult Sair()
         {
-            return RedirectToAction("Index","Home");
+            //Limpando sessão atual
+            HttpContext.Session.Clear();
+            return RedirectToAction("Entrar", "Conta");
         }
 
     }
