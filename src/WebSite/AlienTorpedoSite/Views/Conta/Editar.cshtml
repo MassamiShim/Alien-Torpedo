@@ -1,7 +1,7 @@
 ﻿@model AlienTorpedoSite.ViewModels.Conta.ContaViewModel
 
-<!-- Informando qual layout utilizar para a página, nesse caso ele utilizará o padrão que já foi configurado no viewStart.cshtml-->
 @{
+    <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
 
@@ -50,7 +50,15 @@
                     }
                 </div>
             </div>
+            @if (ViewBag.Codigo != null)
+            {
+                if (ViewBag.Codigo != 0)
+                {
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+                }
+            }
         </div>
+        
         <div class="panel-footer">
             <div style="text-align:right">
                 <a asp-action="Detalhar" asp-route-Cd_usuario="@Model.Cd_usuario"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancelar Edição</a> &nbsp;

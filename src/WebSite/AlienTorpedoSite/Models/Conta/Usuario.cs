@@ -7,24 +7,24 @@ namespace AlienTorpedoSite.Models.Conta
     {
         [Key]
         [Required]
-        public int Cd_usuario { get; set; }
+        public int CdUsuario { get; set; }
 
         [Required]
         [StringLength(80)]
-        public string Nm_email { get; set; }
+        public string NmEmail { get; set; }
 
         [Required]
         [StringLength(80)]
-        public string Nm_usuario { get; set; }
+        public string NmUsuario { get; set; }
         
         [Required]
         [StringLength(20)]
-        public string Nm_senha { get; set; }
+        public string NmSenha { get; set; }
 
-        public bool Dv_ativo  { get; set; }
+        public bool DvAtivo  { get; set; }
 
         [Required]
-        public DateTime Dt_inclusao { get; set; }
+        public DateTime DtInclusao { get; set; }
         
     }
 }

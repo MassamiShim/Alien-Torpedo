@@ -30,6 +30,20 @@
                     </div>
                 </div>
             </div>
+           @if (ViewBag.Codigo != null)
+           {
+               if (ViewBag.Codigo != 0)
+               {
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+               }
+               else
+               {
+                    <div class="alert alert-success" role="alert">
+                        <p>@ViewBag.Mensagem</p> &nbsp;
+                        <a asp-action="Entrar"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Clique aqui para acessar sua conta!</a> 
+                    </div>
+               }
+           }
         </div>
         <div class="panel-footer">
             <div style="text-align:right">
@@ -41,7 +55,7 @@
 
 <!-- sessão de scripts responsáveis por validações presentes no arquivo abaixo -->
 @section scripts
-    {
+{
     @{ Html.RenderPartial("_ValidationScriptsPartial"); }
 }
 
