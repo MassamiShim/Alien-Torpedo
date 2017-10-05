@@ -1,4 +1,6 @@
-﻿@{
+﻿@model AlienTorpedoSite.ViewModels.Grupo.GrupoViewModel
+
+@{
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
@@ -6,18 +8,31 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<div>
-    <button name="btn" class="btn btn-primary btn-lg" asp-action="btnSorteio" asp-controller="Grupo" >SAI CAPETAAAAAAAAAA!</button>
-    @*style="width:200px; height:200px"*@
-
-    <a asp-action="btnSorteio" >Hello World!</a>
-
-    <p>
-    <label id="result1">@ViewBag.grupoEvento</label>
-    <label id="result2">ViewBag.cdGrupo</label>
-    <label id="result3">ViewBag.dtEvento</label>
-    <label id="result4">ViewBag.nmEvento</label>
-    <label id="result5">ViewBag.nmEndereco</label>
-    <label id="result6">ViewBag.vlEvento</label>
-</p>
-</div>
+<form asp-action="AtrelarEvento">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Teste Manero</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @*<label asp-for="IdGrupoEvento" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <span class="form-control">@Model.IdGrupoEvento</span>
+                    </div>*@
+                    <textarea asp-for="IdGrupoEvento">@Model.IdGrupoEvento</textarea>
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.nmEvento != null)
+            {
+                if (ViewBag.nmEvento != 0)
+                {
+                <div class="alert alert-danger" role="alert">@ViewBag.nmEvento</div>
+            }
+        }
+        <div>
+            <input type="submit" class="btn btn-info" value="Atualizar" />
+        </div>
+    </div>
+</form>

@@ -1,4 +1,5 @@
 ﻿using AlienTorpedoAPI.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,12 +85,15 @@ namespace AlienTorpedoAPI.Classes
             dbContext.SaveChanges();
         }
 
-        public IQueryable BuscaSorteio(dbAlienContext dbContext, GrupoEvento grupoEvento)
+        public string BuscaSorteio(dbAlienContext dbContext, GrupoEvento grupoEvento)
         {
             int cdEvento = 0;
             cdEvento = (int)grupoEvento.CdEvento;
 
-            var dado = dbContext.GrupoEvento.Where(w => w.IdGrupoEvento == grupoEvento.IdGrupoEvento)
+            var dado = new
+            {
+                resultado =
+                dbContext.GrupoEvento.Where(w => w.IdGrupoEvento == grupoEvento.IdGrupoEvento)
                 .Join(dbContext.Evento,
                       ge => ge.CdEvento,
                       e => e.CdEvento,
@@ -103,8 +107,9 @@ namespace AlienTorpedoAPI.Classes
                     s.e.NmEvento,
                     s.e.NmEndereco,
                     s.e.VlEvento
-                });
-            return dado;
+                })
+            };
+            return JsonConvert.SerializeObject(dado);
         }
     }
 }
