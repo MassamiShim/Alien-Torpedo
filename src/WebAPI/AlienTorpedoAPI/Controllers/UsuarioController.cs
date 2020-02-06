@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AlienTorpedoAPI.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace AlienTorpedoAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     public class UsuarioController : Controller
     {
         //Vinicius - Construtor para iniciar dbcontext - INI
@@ -20,7 +22,7 @@ namespace AlienTorpedoAPI.Controllers
         }
         //Vinicius - Construtor para iniciar dbcontext - FIM
 
-        // POST api/Usuario
+        // POST api/Usuario/CadastraUsuario
         [HttpPost]
         public IActionResult CadastraUsuario([FromBody]Usuario user)
         {
@@ -37,21 +39,21 @@ namespace AlienTorpedoAPI.Controllers
             return Ok("Usuário cadastrado com sucesso!");
         }
 
-        [HttpPut("{CdUsuario}")]
-        public IActionResult AlteraSenha(int CdUsuario, [FromBody] Usuario user)
+        [HttpPut]
+        public IActionResult AlteraSenha([FromBody] Usuario user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (user == null || user.NmSenha == "")
+            if (user == null || string.IsNullOrEmpty(user.NmSenha))
             {
                 return BadRequest("Favor fornecer a nova senha!");
             }
 
             //Selecionando usuário
-            var UsuarioCadastrado = _dbcontext.Usuario.FirstOrDefault(u => u.CdUsuario == CdUsuario);
+            var UsuarioCadastrado = _dbcontext.Usuario.FirstOrDefault(u => u.CdUsuario == user.CdUsuario);
 
             UsuarioCadastrado.NmSenha = CriptografaSenha(user.NmSenha);
 
@@ -64,9 +66,18 @@ namespace AlienTorpedoAPI.Controllers
 
         private string CriptografaSenha(string senha)
         {
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(senha);
+            byte[] hash = md5.ComputeHash(inputBytes);
 
+            // Converter byte array para string hexadecimal
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
 
-            return senha;
-        } 
+            return sb.ToString();
+        }
     }
 }
