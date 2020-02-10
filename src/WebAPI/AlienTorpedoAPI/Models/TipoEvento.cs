@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlienTorpedoAPI.Models
 {
@@ -10,7 +11,8 @@ namespace AlienTorpedoAPI.Models
             Evento = new HashSet<Evento>();
         }
 
-        public short CdTipoEvento { get; set; }
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public short? CdTipoEvento { get; set; }
         public string NmTipoEvento { get; set; }
 
         public virtual ICollection<Evento> Evento { get; set; }

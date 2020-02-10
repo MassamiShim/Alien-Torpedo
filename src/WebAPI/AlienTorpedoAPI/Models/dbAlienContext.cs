@@ -26,8 +26,7 @@ namespace AlienTorpedoAPI.Models
                     .HasName("pk_cd_evento");
 
                 entity.Property(e => e.CdEvento)
-                    .HasColumnName("Cd_evento")
-                    .ValueGeneratedNever();
+                    .HasColumnName("Cd_evento");
 
                 entity.Property(e => e.CdTipoEvento).HasColumnName("Cd_tipo_evento");
 
@@ -64,8 +63,7 @@ namespace AlienTorpedoAPI.Models
                     .HasName("pk_cd_grupo");
 
                 entity.Property(e => e.CdGrupo)
-                    .HasColumnName("Cd_grupo")
-                    .ValueGeneratedNever();
+                    .HasColumnName("Cd_grupo");
 
                 entity.Property(e => e.DtInclusao)
                     .HasColumnName("Dt_inclusao")
@@ -84,8 +82,7 @@ namespace AlienTorpedoAPI.Models
                 entity.ToTable("Grupo_evento");
 
                 entity.Property(e => e.IdGrupoEvento)
-                    .HasColumnName("Id_grupo_evento")
-                    .ValueGeneratedNever();
+                    .HasColumnName("Id_grupo_evento");
 
                 entity.Property(e => e.CdEvento).HasColumnName("Cd_evento");
 
@@ -144,8 +141,7 @@ namespace AlienTorpedoAPI.Models
                 entity.ToTable("Tipo_evento");
 
                 entity.Property(e => e.CdTipoEvento)
-                    .HasColumnName("Cd_tipo_evento")
-                    .ValueGeneratedNever();
+                    .HasColumnName("Cd_tipo_evento");
 
                 entity.Property(e => e.NmTipoEvento)
                     .HasColumnName("Nm_tipo_evento")
