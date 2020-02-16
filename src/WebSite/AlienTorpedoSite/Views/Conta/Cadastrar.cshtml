@@ -1,0 +1,61 @@
+﻿@model AlienTorpedoSite.ViewModels.Conta.ContaViewModel
+
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<form asp-action="Cadastrar">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Preencha os campos abaixo para se cadastrar:</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="Nm_email" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_email" class="form-control" placeholder="Insira seu e-mail aqui" />
+                        <span asp-validation-for="Nm_email" class="text-danger" />
+                    </div>
+
+                    <label asp-for="Nm_usuario" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_usuario" class="form-control" placeholder="Insira seu nome aqui" />
+                        <span asp-validation-for="Nm_usuario" class="text-danger" />
+                    </div>
+
+                    <label asp-for="Nm_senha" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_senha" type="password" class="form-control" placeholder="Insira sua senha aqui" />
+                        <span asp-validation-for="Nm_senha" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+           @if (ViewBag.Codigo != null)
+           {
+               if (ViewBag.Codigo != 0)
+               {
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+               }
+               else
+               {
+                    <div class="alert alert-success" role="alert">
+                        <p>@ViewBag.Mensagem</p> &nbsp;
+                        <a asp-action="Entrar"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Clique aqui para acessar sua conta!</a> 
+                    </div>
+               }
+           }
+        </div>
+        <div class="panel-footer">
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- sessão de scripts responsáveis por validações presentes no arquivo abaixo -->
+@section scripts
+{
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}
+

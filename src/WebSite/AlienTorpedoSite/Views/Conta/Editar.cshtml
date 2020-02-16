@@ -1,0 +1,76 @@
+﻿@model AlienTorpedoSite.ViewModels.Conta.ContaViewModel
+
+@{
+    <!-- Informando layout a ser utilizado caso o user esteja logado -->
+    Layout = "_Layout_logado";
+}
+
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<form asp-action="Editar" asp-route-Cd_usuario="@Model.Cd_usuario">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Abaixo as informações que podem ser editadas:</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="Cd_usuario" class="col-md-2 control-label" ></label>
+                    <div class="col-md-10">
+                        <span class="form-control">@Model.Cd_usuario</span>
+                    </div>
+                    <label asp-for="Nm_email" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_email" class="form-control" placeholder="Insira seu e-mail aqui" />
+                        <span asp-validation-for="Nm_email" class="text-danger" />
+                    </div>
+                    <label asp-for="Nm_usuario" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_usuario" class="form-control" placeholder="Insira seu nome aqui" />
+                        <span asp-validation-for="Nm_usuario" class="text-danger" />
+                    </div>
+                    <label asp-for="Nm_senha" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Nm_senha" type="password" class="form-control" placeholder="Insira novamente sua senha" />
+                        <span asp-validation-for="Nm_senha" class="text-danger" />
+                    </div>
+                    <label asp-for="Dv_ativo" class="col-md-2 control-label"></label>
+                    @if (Model.Dv_ativo == true)
+                    {
+                        <div class="col-md-10">
+                            <span class="form-control">Ativo</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-5">
+                            <span class="form-control">Cancelado</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            @if (ViewBag.Codigo != null)
+            {
+                if (ViewBag.Codigo != 0)
+                {
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+                }
+            }
+        </div>
+        
+        <div class="panel-footer">
+            <div style="text-align:right">
+                <a asp-action="Detalhar" asp-route-Cd_usuario="@Model.Cd_usuario"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancelar Edição</a> &nbsp;
+                <input type="submit" class="btn btn-info" value="Atualizar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- sessão de scripts responsáveis por validações presentes no arquivo abaixo -->
+@section scripts
+    {
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}
+
