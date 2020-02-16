@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlienTorpedoAPI.Models
 {
@@ -11,7 +12,8 @@ namespace AlienTorpedoAPI.Models
             GrupoUsuario = new HashSet<GrupoUsuario>();
         }
 
-        public int CdUsuario { get; set; }
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int? CdUsuario { get; set; }
         public string NmEmail { get; set; }
         public string NmUsuario { get; set; }
         public string NmSenha { get; set; }

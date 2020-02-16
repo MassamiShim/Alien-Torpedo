@@ -8,7 +8,7 @@ using AlienTorpedoAPI.Models;
 
 namespace AlienTorpedoAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     public class GrupoController : Controller
     {
         private readonly dbAlienContext _dbcontext;
@@ -17,7 +17,7 @@ namespace AlienTorpedoAPI.Controllers
         {
             _dbcontext = dbContext;
         }
-        // POST api/Grupo
+        // POST api/Grupo/CadastraGrupo
         [HttpPost]
         public IActionResult CadastraGrupo([FromBody]Grupo group)
         {
@@ -32,5 +32,19 @@ namespace AlienTorpedoAPI.Controllers
             return Ok("Grupo cadastrado com sucesso!");
         }
 
+        // POST api/Grupo/CadastraGrupoEvento
+        [HttpPost]
+        public IActionResult CadastraGrupoEvento([FromBody]GrupoEvento group)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _dbcontext.Add(group);
+            _dbcontext.SaveChanges();
+
+            return Ok("Grupo Evento cadastrado com sucesso!");
+        }
     }
 }

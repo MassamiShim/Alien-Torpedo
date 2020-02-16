@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlienTorpedoAPI.Models
 {
     public partial class GrupoEvento
     {
-        public int IdGrupoEvento { get; set; }
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int? IdGrupoEvento { get; set; }
         public int CdGrupo { get; set; }
         public int? CdEvento { get; set; }
         public string NmDescricao { get; set; }

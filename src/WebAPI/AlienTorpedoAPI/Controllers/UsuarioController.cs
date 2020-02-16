@@ -21,13 +21,13 @@ namespace AlienTorpedoAPI.Controllers
         }
         //Vinicius - Construtor para iniciar dbcontext - FIM
 
-        // POST api/Usuario
+        // POST api/Usuario/CadastraUsuario
         [HttpPost]
         public IActionResult CadastraUsuario([FromBody]Usuario user)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrï¿½o, favor verificar!" });
             }
 
             try
@@ -38,11 +38,11 @@ namespace AlienTorpedoAPI.Controllers
                 _dbcontext.Add(user);
                 _dbcontext.SaveChanges();
 
-                return Json(new { cdretorno = 0, mensagem = "Usuário cadastrado com sucesso" });
+                return Json(new { cdretorno = 0, mensagem = "Usuï¿½rio cadastrado com sucesso" });
             }
             catch
             {
-                return Json(new { cdretorno = 1, mensagem = "Erro ao cadastrar usuário, favor verificar!"});
+                return Json(new { cdretorno = 1, mensagem = "Erro ao cadastrar usuï¿½rio, favor verificar!"});
             }
 
         }
@@ -52,15 +52,15 @@ namespace AlienTorpedoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrï¿½o, favor verificar!" });
             }
 
-            if (user == null || user.NmSenha == "")
+            if (user == null || string.IsNullOrEmpty(user.NmSenha))
             {
                 return Json(new { cdretorno = 1, mensagem = "Favor fornecer a nova senha!" });
             }
 
-            var CdRetorno = Senha.AlteraSenha(user.CdUsuario, user.NmSenha, _dbcontext);
+            var CdRetorno = Senha.AlteraSenha(user.CdUsuario.Value, user.NmSenha, _dbcontext);
 
             if (CdRetorno == 0)
             {
@@ -78,7 +78,7 @@ namespace AlienTorpedoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrï¿½o, favor verificar!" });
             }
 
             try
@@ -94,11 +94,11 @@ namespace AlienTorpedoAPI.Controllers
                 _dbcontext.Usuario.Update(UsuarioCadastrado);
                 _dbcontext.SaveChanges();
 
-                return Json(new { cdretorno = 0, mensagem = "Usuário alterado com sucesso!" });
+                return Json(new { cdretorno = 0, mensagem = "Usuï¿½rio alterado com sucesso!" });
             }
             catch
             {
-                return Json(new { cdretorno = 1, mensagem = "Falha ao alterar usuário, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Falha ao alterar usuï¿½rio, favor verificar!" });
             }
         }
 
@@ -107,7 +107,7 @@ namespace AlienTorpedoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrï¿½o, favor verificar!" });
             }
 
             try

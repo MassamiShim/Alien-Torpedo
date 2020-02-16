@@ -27,7 +27,7 @@ Create Table Usuario
 	Cd_usuario		int identity(1,1)
 	,Nm_email		varchar(80)	
 	,Nm_usuario		varchar(80)
-	,Nm_senha		varchar(20)
+	,Nm_senha		varchar(80)
 	,Dv_ativo		bit
 	,Dt_inclusao	datetime
 	Constraint pk_cd_usuario primary key(Cd_usuario)
@@ -85,7 +85,7 @@ go
 -- Grupo_evento
 Create Table Grupo_evento
 (
-	Id_grupo_evento int
+	Id_grupo_evento int identity(1, 1)
 	,Cd_grupo		int
 	,Cd_evento		int
 	,Nm_descricao	varchar(80)

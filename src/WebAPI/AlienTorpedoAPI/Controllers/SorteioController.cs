@@ -10,7 +10,7 @@ using AlienTorpedoAPI.Models;
 namespace AlienTorpedoAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Sorteio")]
+    [Route("api/[controller]/[Action]")]
     public class SorteioController : Controller
     {
 
@@ -33,8 +33,8 @@ namespace AlienTorpedoAPI.Controllers
         {
             return "value";
         }
-        
-        // POST: api/Sorteio
+
+        // POST: api/Sorteio/Post
         [HttpPost]
         public string Post([FromBody]GrupoEvento grupoEvento)
         {
@@ -58,7 +58,7 @@ namespace AlienTorpedoAPI.Controllers
         public void Put(int id, [FromBody]string value)
         {
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)

@@ -30,7 +30,7 @@ namespace AlienTorpedoAPI.Classes
         {
             int idGrupoEvento = 0;
 
-            idGrupoEvento = grupoEvento.IdGrupoEvento;
+            idGrupoEvento = grupoEvento.IdGrupoEvento.Value;
 
             var varGrupoEvento = dbContext.GrupoEvento.FirstOrDefault(u => u.IdGrupoEvento == idGrupoEvento);
 
@@ -69,8 +69,8 @@ namespace AlienTorpedoAPI.Classes
                 if ((10 - item.Qtd) >= target)
                 {
                     grupoEvento.CdEvento = item.CodEvento;
-                    GravaSorteio(dbContext, varGrupoEvento, item.CodEvento);
-                    return item.CodEvento;
+                    GravaSorteio(dbContext, varGrupoEvento, item.CodEvento.Value);
+                    return item.CodEvento.Value;
                 }
                 else
                     target -= (10 - item.Qtd);
