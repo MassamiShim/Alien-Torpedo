@@ -1,12 +1,29 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AlienTorpedoSite.Application.AppServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlienTorpedoSite.Controllers
-{
+{ 
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly EventoAppService _eventoAppService;
+
+        public HomeController(EventoAppService eventoAppService)
         {
+            _eventoAppService = eventoAppService;
+        }
+
+        public JsonResult Teste()
+        {
+            var retorno = _eventoAppService.ObtemTiposEvento();
+            return Json(retorno);
+        }
+
+        public IActionResult Index()
+        {            
             return View();
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AlienTorpedoSite.Application.AppServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ namespace AlienTorpedoSite
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-
+        
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,6 +34,12 @@ namespace AlienTorpedoSite
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // Add framework services.
+            services.AddMvc();
+
+            // Add classes
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddScoped<EventoAppService>();
+            services.AddScoped<BaseAppService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
