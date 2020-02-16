@@ -60,7 +60,7 @@ namespace AlienTorpedoAPI.Controllers
                 return Json(new { cdretorno = 1, mensagem = "Favor fornecer a nova senha!" });
             }
 
-            var CdRetorno = Senha.AlteraSenha(user.CdUsuario, user.NmSenha, _dbcontext);
+            var CdRetorno = Senha.AlteraSenha(user.CdUsuario.Value, user.NmSenha, _dbcontext);
 
             if (CdRetorno == 0)
             {
