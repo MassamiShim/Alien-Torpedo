@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlienTorpedoSite.Controllers
@@ -13,22 +10,31 @@ namespace AlienTorpedoSite.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Sobre()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Title"] = "Sobre";
+            ViewData["Message"] = "Sobre nosso sistema:";
+
+            if (HttpContext.Session.GetString("Cd_usuario") != null)
+                ViewBag.Dv_logado = true;
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Contato()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Contato";
+            ViewData["Message"] = "Entre em contato conosco:";
+            
+            if (HttpContext.Session.GetString("Cd_usuario") != null)
+                ViewBag.Dv_logado = true;
 
             return View();
         }
-
-        public IActionResult Error()
+        
+        public IActionResult Error(string msg)
         {
+            ViewBag.Mensagem = msg;
             return View();
         }
     }
