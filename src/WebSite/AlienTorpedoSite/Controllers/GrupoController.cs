@@ -5,15 +5,25 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using AlienTorpedoSite.ViewModels.Grupo;
 using System;
+using AlienTorpedoSite.Application.AppServices;
 
 namespace AlienTorpedoSite.Controllers
 {
     public class GrupoController : Controller
     {
+        private readonly GrupoAppService _grupoAppService;
+
+        public GrupoController(GrupoAppService grupoAppService)
+        {
+            _grupoAppService = grupoAppService;
+        }
+
         public IActionResult Detalhar(int Cd_usuario = 0)
         {
             ViewData["Title"] = "Grupo";
-            return View();
+            var lstGrupos = _grupoAppService.ListaGrupos();
+
+            return View(lstGrupos);
         }
 
         public IActionResult Cadastrar(int Cd_usuario = 0)
@@ -21,6 +31,16 @@ namespace AlienTorpedoSite.Controllers
             ViewData["Title"] = "Cadastrar Grupo";
             return View();
         }
+        [HttpPost]
+        public IActionResult Cadastrar(Grupo grupo)
+        {
+            if(!ModelState.IsValid)
+                return View();
+
+            string strRetorno = _grupoAppService.AdicionarGrupo(grupo);
+            return RedirectToAction("Detalhar");
+        }
+
 
         public IActionResult AtrelarEvento(int Cd_usuario = 0)
         {

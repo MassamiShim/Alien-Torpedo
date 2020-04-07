@@ -18,6 +18,15 @@ namespace AlienTorpedoAPI.Controllers
             _dbcontext = dbContext;
         }
 
+        // GET api/Evento/ListaEventos
+        [HttpGet]
+        public IActionResult ListaEventos()
+        {
+            var TipoEventos = _dbcontext.Evento.ToList();
+
+            return Ok(TipoEventos);
+        }
+
         // POST api/Evento/CadastraEvento
         [HttpPost]
         public IActionResult CadastraEvento([FromBody]Evento evento)
@@ -48,6 +57,7 @@ namespace AlienTorpedoAPI.Controllers
             return Ok("Tipo de evento cadastrado com sucesso!");
         }
 
+        // GET api/Evento/ListaTipoEvento
         [HttpGet]
         public IActionResult ListaTipoEvento()
         {
@@ -55,6 +65,5 @@ namespace AlienTorpedoAPI.Controllers
 
             return Ok(TipoEventos);
         }
-
     }
 }

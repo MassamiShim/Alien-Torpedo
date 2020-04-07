@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
 namespace AlienTorpedoSite
 {
@@ -38,7 +39,9 @@ namespace AlienTorpedoSite
 
             // Add classes
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddScoped<HttpClient>();
             services.AddScoped<EventoAppService>();
+            services.AddScoped<GrupoAppService>();
             services.AddScoped<BaseAppService>();
         }
 

@@ -1,10 +1,60 @@
-﻿
+﻿@model AlienTorpedoSite.Models.Grupo.Grupo
+
 @{
-    <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
 
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<br />
+<br />
+<form method="post" asp-controller="Grupo" asp-action="Cadastrar">
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Cadastrar Grupo</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="NmGrupo" class="col-md-1 control-label">Grupo</label>
+                    <div class="col-md-4">
+                        <input asp-for="NmGrupo" class="form-control col-lg-2" placeholder="Nome Grupo" required />
+                        <span asp-validation-for="NmGrupo" class="text-danger"></span>
+                    </div>
 
-<button>SAi CApeta!</button>
+                    <label asp-for="NmGrupo" class="col-md-2 control-label">Data Inclusão</label>
+                    <div class="col-md-3">
+                        <input type="date" asp-for="DtInclusao" class="form-control" />
+                        <span asp-validation-for="DtInclusao" class="text-danger"></span>
+                    </div>
+
+                </div>               
+
+            </div>
+        </div>
+        <div class="panel-footer">
+
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (ViewBag.Codigo == 0)
+{
+    <div class="alert alert-success">
+        @ViewBag.Mensagem
+    </div>
+}
+
+@if (ViewBag.Codigo == 1)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Mensagem
+    </div>
+}
+
+
+@section Scripts
+    {
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}

@@ -1,5 +1,6 @@
 ﻿using AlienTorpedoSite.Application.Interfaces;
 using AlienTorpedoSite.Models;
+using AlienTorpedoSite.Models.Evento;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,50 @@ namespace AlienTorpedoSite.Application.AppServices
     public class EventoAppService : IEvento
     {
         private readonly BaseAppService _baseAppService;
+        private readonly HttpClient _http;
 
-        public EventoAppService(BaseAppService baseAppService)
+        public EventoAppService(BaseAppService baseAppService, HttpClient http)
         {
-            _baseAppService = baseAppService;             
+            _baseAppService = baseAppService;
+            _http = http;
         }
 
         public List<TipoEvento> ObtemTiposEvento()
         {
             HttpClient client = new HttpClient();
-            //string url = "http://localhost:53113/api/Evento/ListaTipoEvento";
             string url = _baseAppService.GetUrlApi() + "api/Evento/ListaTipoEvento";
             var response = client.GetStringAsync(url);
             var tipoEventos = JsonConvert.DeserializeObject<List<TipoEvento>>(response.Result);
 
             return tipoEventos;
+        }
+
+        public string AdicionarTipoEvento(TipoEvento tipoEvento)
+        {
+            string url = _baseAppService.GetUrlApi() + "api/Evento/CadastraTipoEvento";
+            var stringContent = new StringContent(JsonConvert.SerializeObject(tipoEvento), UnicodeEncoding.UTF8, "application/json");
+            var response = _http.PostAsync(url, stringContent).Result;
+
+            return response.ToString();
+        }
+
+        public List<Evento> ObtemListaEventos()
+        {
+            HttpClient client = new HttpClient();
+            string url = _baseAppService.GetUrlApi() + "api/Evento/ListaEventos";
+            var response = client.GetStringAsync(url);
+            var lstEventos = JsonConvert.DeserializeObject<List<Evento>>(response.Result);
+
+            return lstEventos;
+        }
+
+        public string AdicionarEvento(Evento evento)
+        {
+            string url = _baseAppService.GetUrlApi() + "api/Evento/CadastraEvento";
+            var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
+            var response = _http.PostAsync(url, stringContent).Result;
+
+            return response.ToString();
         }
     }
 }

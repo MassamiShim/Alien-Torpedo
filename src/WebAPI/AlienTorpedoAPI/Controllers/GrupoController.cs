@@ -17,6 +17,15 @@ namespace AlienTorpedoAPI.Controllers
         {
             _dbcontext = dbContext;
         }
+
+        // GET api/Grupo/ListaGrupo
+        [HttpGet]
+        public IActionResult ListaGrupo()
+        {
+            var lstGrupos = _dbcontext.Grupo.ToList();
+            return Ok(lstGrupos);
+        }
+
         // POST api/Grupo/CadastraGrupo
         [HttpPost]
         public IActionResult CadastraGrupo([FromBody]Grupo group)
