@@ -5,11 +5,19 @@ using System;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using AlienTorpedoSite.Application.AppServices;
 
 namespace AlienTorpedoSite.Controllers
 {
     public class ContaController : Controller
     {
+        private readonly UsuarioAppService _usuarioAppService;
+
+        public ContaController(UsuarioAppService usuarioAppService)
+        {
+            _usuarioAppService = usuarioAppService;
+        }
+
         public IActionResult Cadastrar()
         {
             ViewData["Title"] = "Cadastro de Conta";
@@ -22,53 +30,18 @@ namespace AlienTorpedoSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                Usuario usuario = new Usuario
                 {
-                    //atribuindo informações cadastradas ao objeto usuario
-                    Usuario usuario = new Usuario
-                    {
-                        NmEmail = contaViewModel.Nm_email,
-                        NmSenha = contaViewModel.Nm_senha,
-                        NmUsuario = contaViewModel.Nm_usuario,
-                        DvAtivo = true,
-                        DtInclusao = DateTime.UtcNow //formato padrão
-                    };
+                    NmEmail = contaViewModel.Nm_email,
+                    NmSenha = contaViewModel.Nm_senha,
+                    NmUsuario = contaViewModel.Nm_usuario,
+                    DvAtivo = true,
+                };
 
-                    //Chamando API para cadastrar o usuário na base 
-                    using (HttpClient client = new HttpClient())
-                    {
-                        //Setando endereço da API
-                        client.BaseAddress = new System.Uri("http://localhost:65338/api/Usuario/CadastraUsuario");
-                        //Limpando header
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        //Adicionando um novo header do tipo JSON
-                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                var retorno = _usuarioAppService.AdicionarUsuario(usuario);
+                ViewBag.Codigo = retorno.cdretorno;
+                ViewBag.Mensagem = retorno.mensagem;
 
-                        //Transformando obj Usuario em uma string
-                        string stringData = JsonConvert.SerializeObject(usuario);
-
-                        //Transformando string em um arquivo do tipo JSON
-                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-
-                        //Chamando API passando o arquivo JSON
-                        HttpResponseMessage response = client.PostAsync("http://localhost:65338/api/Usuario/CadastraUsuario", contentData).Result;
-
-                        //Passando retorno da API para uma string
-                        string retorno = response.Content.ReadAsStringAsync().Result;
-
-                        //Fragmentando retorno do arquivo json 
-                        dynamic resultado = JsonConvert.DeserializeObject(retorno);
-
-                        //Enviando retorno para a tela
-                        ViewBag.Mensagem = resultado.mensagem.ToString();
-                        ViewBag.Codigo = Int32.Parse(resultado.cdretorno.ToString());
-                        
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return RedirectToAction("Error", "Home", new { msg = ex.InnerException.ToString() });
-                }
             }
             else
             {
@@ -79,8 +52,8 @@ namespace AlienTorpedoSite.Controllers
 
             return View(contaViewModel);
         }
-        
-        
+
+
         public IActionResult Entrar()
         {
             ViewData["Title"] = "Entrar";
@@ -94,82 +67,45 @@ namespace AlienTorpedoSite.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        //Chamando API para validar o login ..
 
-                        //Recebendo retorno da API
-                        Usuario usuario = new Usuario
-                        {
-                            CdUsuario = 4,
-                            NmUsuario = "Frank Barba",
-                            NmEmail = "frank@barba.com",
-                            NmSenha = "beard",
-                            DvAtivo = true,
-                            DtInclusao = DateTime.Parse("2017-09-19 14:58:20.083")
-                        };
+                var retorno = _usuarioAppService.AutentificarUsuario(entrarViewModel.Nm_email, entrarViewModel.Nm_senha);
 
-                        if (usuario != null)
-                        {
-                            //redirecionar para outra tela, se sucesso
-                            if (usuario.DvAtivo == true)
-                            {
-                                //Armazenando dados do usuário em sessão
-                                HttpContext.Session.SetString("Cd_usuario", usuario.CdUsuario.ToString());
-                                HttpContext.Session.SetString("Nm_usuario", usuario.NmUsuario);
-                                HttpContext.Session.SetString("Nm_email", usuario.NmEmail);
-                                HttpContext.Session.SetString("Nm_senha", usuario.NmSenha);
-                                HttpContext.Session.SetString("Dv_ativo", usuario.DvAtivo.ToString());
-                                HttpContext.Session.SetString("Dt_inclusao", usuario.DtInclusao.ToString());
+                ViewBag.Codigo = retorno.cdretorno;
+                ViewBag.Mensagem = retorno.mensagem;
 
-                                ViewBag.Mensagem = "Acesso liberado!";
-                                ViewBag.Codigo = 0;
-
-                                return RedirectToAction("Index", "Home");
-                            }
-                            else
-                            {
-                                ViewBag.Mensagem = "Conta cancelada!";
-                                ViewBag.Codigo = 1;
-                            }
-                        }
-                        else
-                        {
-                            ViewBag.Mensagem = "Acesso negado! Confirme se dados estão corretos.";
-                            ViewBag.Codigo = 1;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return RedirectToAction("Error", "Home", new { msg = ex.InnerException.ToString() });
-                }
+                //se sucesso redireciono
+                if (retorno.cdretorno == 0 && retorno.usuario != null)
+                {                    
+                    //Armazenando dados do usuário em sessão
+                    HttpContext.Session.SetString("Cd_usuario", JsonConvert.SerializeObject(retorno.usuario));                    
+                    return RedirectToAction("Index", "Home");
+                }                   
             }
             else
             {
                 //erro
-                ViewBag.Mensagem = "Dados Invalidos!";
+                ViewBag.Mensagem = "Dados Inválidos!";
                 ViewBag.Codigo = 1;
             }
 
             return View(entrarViewModel);
         }
-        
+
 
         public IActionResult Detalhar()
         {
             ViewData["Title"] = "Sua Conta";
-            
+
             //passando dados da sessão para a viewModel exibir em tela
+            var currentUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Cd_usuario"));
+
             ContaViewModel contaViewModel = new ContaViewModel
             {
-                Cd_usuario = Int32.Parse(HttpContext.Session.GetString("Cd_usuario")),
-                Nm_email = HttpContext.Session.GetString("Nm_email"),
-                Nm_usuario = HttpContext.Session.GetString("Nm_usuario"),
-                Dv_ativo = bool.Parse(HttpContext.Session.GetString("Dv_ativo")),
-                Dt_inclusao = DateTime.Parse(HttpContext.Session.GetString("Dt_inclusao"))
+                Cd_usuario = currentUser.CdUsuario,
+                Nm_email = currentUser.NmEmail,
+                Nm_usuario = currentUser.NmUsuario,
+                Dv_ativo = currentUser.DvAtivo,
+                Dt_inclusao = currentUser.DtInclusao
             };
 
             ViewData["Title"] = "Sua Conta";
@@ -180,18 +116,18 @@ namespace AlienTorpedoSite.Controllers
         public IActionResult Editar()
         {
             ViewData["Title"] = "Edição de Conta";
-            
-            //Passar dados da sessão para a ContaViewModel exibir em tela
+            //passando dados da sessão para a viewModel exibir em tela
+            var currentUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Cd_usuario"));
+
             ContaViewModel contaViewModel = new ContaViewModel
             {
-                Cd_usuario = Int32.Parse(HttpContext.Session.GetString("Cd_usuario")),
-                Nm_email = HttpContext.Session.GetString("Nm_email"),
-                Nm_usuario = HttpContext.Session.GetString("Nm_usuario"),
-                Nm_senha = HttpContext.Session.GetString("Nm_senha"),
-                Dv_ativo = bool.Parse(HttpContext.Session.GetString("Dv_ativo")),
-                Dt_inclusao = DateTime.Parse(HttpContext.Session.GetString("Dt_inclusao"))
+                Cd_usuario = currentUser.CdUsuario,
+                Nm_email = currentUser.NmEmail,
+                Nm_usuario = currentUser.NmUsuario,
+                Dv_ativo = currentUser.DvAtivo,
+                Dt_inclusao = currentUser.DtInclusao
             };
-            
+
             return View(contaViewModel);
         }
 
@@ -200,53 +136,30 @@ namespace AlienTorpedoSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                Usuario usuario = new Usuario
                 {
-                    //atribuindo informações editadas no objeto usuario
-                    Usuario usuario = new Usuario
-                    {
-                        CdUsuario = contaViewModel.Cd_usuario,
-                        NmEmail = contaViewModel.Nm_email,
-                        NmSenha = contaViewModel.Nm_senha,
-                        NmUsuario = contaViewModel.Nm_usuario,
-                        DvAtivo = contaViewModel.Dv_ativo
-                    };
+                    CdUsuario = contaViewModel.Cd_usuario,
+                    NmEmail = contaViewModel.Nm_email,
+                    NmSenha = contaViewModel.Nm_senha,
+                    NmUsuario = contaViewModel.Nm_usuario
+                };
 
-                    //Chamando API para aplicar as alterações no usuário
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.BaseAddress = new System.Uri("http://localhost:65346/api/Usuario/EditaUsuario");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                        
-                        string stringData = JsonConvert.SerializeObject(usuario);
-                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                var retorno = _usuarioAppService.EditarUsuario(usuario);
+                ViewBag.Mensagem = retorno.mensagem.ToString();
+                ViewBag.Codigo = retorno.cdretorno;
 
-                        //Chamando API passando o arquivo JSON                                              
-                        HttpResponseMessage response = client.PutAsync("http://localhost:65346/api/Usuario/EditaUsuario", contentData).Result;
-
-                        //Passando retorno da API para uma string
-                        string retorno = response.Content.ReadAsStringAsync().Result;
-                        dynamic resultado = JsonConvert.DeserializeObject(retorno);
-
-                        //Enviando retorno para a tela
-                        ViewBag.Mensagem = resultado.mensagem.ToString();
-                        ViewBag.Codigo = Int32.Parse(resultado.cdretorno.ToString());
-
-                        if (ViewBag.Codigo == 0)
-                        {
-                            //Atualiza dados editados na sessão
-                            HttpContext.Session.SetString("Nm_usuario", usuario.NmUsuario);
-                            HttpContext.Session.SetString("Nm_email", usuario.NmEmail);
-                            HttpContext.Session.SetString("Nm_senha", usuario.NmSenha);
-
-                            return RedirectToAction("Detalhar"); //colocar pop-up aqui informando a msg
-                        }
-                    }
-                }
-                catch (Exception ex)
+                if (ViewBag.Codigo == 0)
                 {
-                    return RedirectToAction("Error", "Home", new { msg = ex.InnerException.ToString() });
+                    //Atualiza dados editados na sessão
+                    var currentUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Cd_usuario"));
+                    currentUser.NmEmail = contaViewModel.Nm_email;
+                    currentUser.NmUsuario = contaViewModel.Nm_usuario;
+                    currentUser.NmSenha = contaViewModel.Nm_senha;
+
+                    HttpContext.Session.Clear();
+                    HttpContext.Session.SetString("Cd_usuario", JsonConvert.SerializeObject(currentUser));
+
+                    return RedirectToAction("Detalhar"); //colocar pop-up aqui informando a msg
                 }
             }
             else

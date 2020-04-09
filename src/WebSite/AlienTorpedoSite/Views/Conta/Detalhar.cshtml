@@ -4,9 +4,7 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-
-<h2>@ViewData["Title"]</h2>
-
+<br /><br />
 <div class="panel panel-info" style="border-color: black;">
     <div class="panel-heading" style="background: black; color: white;">
         <h3 class="panel-title">Informações da sua Conta:</h3>
@@ -14,44 +12,45 @@
     <div class="panel-body">
         <div class="form-horizontal">
             <div class="form-group">
-                <label asp-for="Cd_usuario" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
+                <label asp-for="Cd_usuario" class="col-md-1 control-label"></label>
+                <div class="col-md-2">
                     <span class="form-control">@Model.Cd_usuario</span>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Nm_email" class="col-md-2 control-label"></label>
+                <label asp-for="Nm_email" class="col-md-1 control-label"></label>
                 <div class="col-md-10">
                     <span class="form-control">@Model.Nm_email</span>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Nm_usuario" class="col-md-2 control-label"></label>
+                <label asp-for="Nm_usuario" class="col-md-1 control-label"></label>
                 <div class="col-md-10">
                     <span class="form-control">@Model.Nm_usuario</span>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Dt_inclusao" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
+                <label class="col-md-1 control-label">Inclusão</label>
+                <div class="col-md-2">
                     <span class="form-control">@Model.Dt_inclusao.ToLocalTime()</span>
                 </div>
-            </div>
-            <div class="form-group">
                 <label asp-for="Dv_ativo" class="col-md-2 control-label"></label>
                 @if (Model.Dv_ativo == true)
                 {
-                    <div class="col-md-10">
+                    <div class="col-md-2">
                         <span class="form-control">Ativo</span>
                     </div>
                 }
                 else
                 {
-                    <div class="col-md-10">
+                    <div class="col-md-2">
                         <span class="form-control">Cancelado</span>
                     </div>
                 }
             </div>
+            @*<div class="form-group">
+                
+            </div>*@
         </div>
         @if (ViewBag.Codigo != null)
         {

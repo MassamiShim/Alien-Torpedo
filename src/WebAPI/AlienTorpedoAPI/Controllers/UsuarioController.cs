@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AlienTorpedoAPI.Models;
 using AlienTorpedoAPI.Classes;
+using Newtonsoft.Json;
 
 namespace AlienTorpedoAPI.Controllers
 {
@@ -21,38 +22,63 @@ namespace AlienTorpedoAPI.Controllers
         }
         //Vinicius - Construtor para iniciar dbcontext - FIM
 
+        // GET api/Usuario/AutenticarUsuario
+        [HttpGet]
+        public IActionResult AutenticarUsuario(string NmEmail, string NmSenha)
+        {
+            NmSenha = Senha.CriptografaSenha(NmSenha);
+
+            var user = _dbcontext.Usuario.FirstOrDefault(x => x.NmEmail == NmEmail && x.NmSenha == NmSenha);
+
+            if(user != null)
+            {
+                if (!user.DvAtivo.Value)
+                {
+                    return Json(new { cdretorno = 1, mensagem = "Usuário ou Conta cancelada!" });
+                }
+
+                return Json(new { cdretorno = 0, mensagem = "Usuário autenticado com sucesso!", usuario = new Usuario { CdUsuario = user.CdUsuario, NmUsuario = user.NmUsuario, NmEmail = user.NmEmail, NmSenha = user.NmSenha, DvAtivo = user.DvAtivo, DtInclusao = user.DtInclusao } });
+            }
+            else
+            {
+                return Json(new { cdretorno = 1, mensagem = "Usuário ou senha inválido." });
+            }            
+        }
+
         // POST api/Usuario/CadastraUsuario
         [HttpPost]
         public IActionResult CadastraUsuario([FromBody]Usuario user)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padr�o, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
             }
 
             try
             {
+                user.CdUsuario = null;
                 user.NmSenha = Senha.CriptografaSenha(user.NmSenha.ToString());
                 user.DtInclusao = DateTime.Now;
 
                 _dbcontext.Add(user);
                 _dbcontext.SaveChanges();
 
-                return Json(new { cdretorno = 0, mensagem = "Usu�rio cadastrado com sucesso" });
+                return Json(new { cdretorno = 0, mensagem = "Usuário cadastrado com sucesso" });
             }
-            catch
+            catch(Exception ex)
             {
-                return Json(new { cdretorno = 1, mensagem = "Erro ao cadastrar usu�rio, favor verificar!"});
+                return Json(new { cdretorno = 1, mensagem = String.Format("Erro ao cadastrar usuário. Para mais informações consulte: {0}", ex.ToString())});
             }
 
         }
 
+        // PUT api/Usuario/AlteraSenha
         [HttpPut]
         public IActionResult AlteraSenha([FromBody] Usuario user)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padr�o, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
             }
 
             if (user == null || string.IsNullOrEmpty(user.NmSenha))
@@ -72,13 +98,13 @@ namespace AlienTorpedoAPI.Controllers
             }
             
         }
-
+        // PUT api/Usuario/EditaUsuario
         [HttpPut]
         public IActionResult EditaUsuario([FromBody] Usuario user)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padr�o, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
             }
 
             try
@@ -94,20 +120,21 @@ namespace AlienTorpedoAPI.Controllers
                 _dbcontext.Usuario.Update(UsuarioCadastrado);
                 _dbcontext.SaveChanges();
 
-                return Json(new { cdretorno = 0, mensagem = "Usu�rio alterado com sucesso!" });
+                return Json(new { cdretorno = 0, mensagem = "Usuário alterado com sucesso!" });
             }
             catch
             {
-                return Json(new { cdretorno = 1, mensagem = "Falha ao alterar usu�rio, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Falha ao alterar usuário, favor verificar!" });
             }
         }
 
+        // PUT api/Usuario/AlteraStatus
         [HttpPut]
         public IActionResult AlteraStatus([FromBody] Usuario user)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padr�o, favor verificar!" });
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
             }
 
             try

@@ -43,6 +43,8 @@ namespace AlienTorpedoSite
             services.AddScoped<EventoAppService>();
             services.AddScoped<GrupoAppService>();
             services.AddScoped<BaseAppService>();
+            services.AddScoped<UsuarioAppService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
