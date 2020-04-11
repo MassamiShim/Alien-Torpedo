@@ -116,7 +116,8 @@ namespace AlienTorpedoSite.Controllers
         public IActionResult Editar()
         {
             ViewData["Title"] = "Edição de Conta";
-            //passando dados da sessão para a viewModel exibir em tela
+            
+            //passando dados da sessão para a viewModel exibir em tela        
             var currentUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Cd_usuario"));
 
             ContaViewModel contaViewModel = new ContaViewModel
@@ -179,45 +180,28 @@ namespace AlienTorpedoSite.Controllers
             {
                 try
                 {
-                    //atribuindo informações editadas no objeto usuario
+                    //passando dados da sessão para a viewModel exibir em tela        
+                    var currentUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Cd_usuario"));
+
                     Usuario usuario = new Usuario
                     {
-                        CdUsuario = Int32.Parse(HttpContext.Session.GetString("Cd_usuario")),
-                        NmUsuario = HttpContext.Session.GetString("Nm_usuario"),
-                        NmEmail = HttpContext.Session.GetString("Nm_email"),
-                        NmSenha = HttpContext.Session.GetString("Nm_senha"),
+                        CdUsuario = currentUser.CdUsuario,
+                        NmUsuario = currentUser.NmUsuario,
+                        NmEmail = currentUser.NmEmail,
+                        NmSenha = currentUser.NmSenha,
                         DvAtivo = false
                     };
 
-                    //Chamando API para cancelar usuário
-                    using (HttpClient client = new HttpClient())
+                    var retorno = _usuarioAppService.AlterarStatusUsuario(usuario);
+                    ViewBag.Mensagem = retorno.mensagem;
+                    ViewBag.Codigo = retorno.cdretorno;
+
+                    if (ViewBag.Codigo == 0)
                     {
-                        client.BaseAddress = new System.Uri("http://localhost:65346/api/Usuario/AlteraStatus");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        //Limpando sessão atual
+                        HttpContext.Session.Clear();
 
-                        string stringData = JsonConvert.SerializeObject(usuario);
-                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-
-                        //Chamando API passando o arquivo JSON                                              
-                        HttpResponseMessage response = client.PutAsync("http://localhost:65346/api/Usuario/AlteraStatus", contentData).Result;
-
-                        //Passando retorno da API para uma string
-                        string retorno = response.Content.ReadAsStringAsync().Result;
-                        dynamic resultado = JsonConvert.DeserializeObject(retorno);
-
-                        //Enviando retorno para a tela
-                        ViewBag.Mensagem = resultado.mensagem.ToString();
-                        ViewBag.Codigo = Int32.Parse(resultado.cdretorno.ToString());
-
-                        if (ViewBag.Codigo == 0)
-                        {
-                            //Limpando sessão atual
-                            HttpContext.Session.Clear();
-
-                            ViewBag.Mensagem = "Conta cancelada com sucesso!";
-                            return RedirectToAction("Entrar", "Conta");
-                        }
+                        return RedirectToAction("Entrar", "Conta");
                     }
                 }
                 catch (Exception ex)

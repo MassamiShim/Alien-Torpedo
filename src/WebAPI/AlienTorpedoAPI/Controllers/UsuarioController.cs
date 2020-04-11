@@ -34,7 +34,7 @@ namespace AlienTorpedoAPI.Controllers
             {
                 if (!user.DvAtivo.Value)
                 {
-                    return Json(new { cdretorno = 1, mensagem = "Usuário ou Conta cancelada!" });
+                    return Json(new { cdretorno = 1, mensagem = "Conta cancelada!" });
                 }
 
                 return Json(new { cdretorno = 0, mensagem = "Usuário autenticado com sucesso!", usuario = new Usuario { CdUsuario = user.CdUsuario, NmUsuario = user.NmUsuario, NmEmail = user.NmEmail, NmSenha = user.NmSenha, DvAtivo = user.DvAtivo, DtInclusao = user.DtInclusao } });

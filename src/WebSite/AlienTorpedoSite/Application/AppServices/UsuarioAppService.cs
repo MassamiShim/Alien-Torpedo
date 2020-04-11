@@ -55,5 +55,17 @@ namespace AlienTorpedoSite.Application.AppServices
 
             return retorno;
         }
+
+        public Retorno AlterarStatusUsuario(Usuario usuario)
+        {
+            string url = _baseAppService.GetUrlApi() + "api/Usuario/AlteraStatus";
+            var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
+            var response = _http.PutAsync(url, stringContent).Result;
+
+            var json = response.Content.ReadAsStringAsync();
+            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+
+            return retorno;
+        }
     }
 }
