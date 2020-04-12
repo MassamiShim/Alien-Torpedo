@@ -1,0 +1,50 @@
+﻿@model AlienTorpedoSite.Models.Grupo.GrupoEvento
+
+@{
+    <!-- Informando layout a ser utilizado caso o user esteja logado -->
+    Layout = "_Layout_logado";
+}
+
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<form asp-action="Sortear">
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Sortear Evento</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-1 control-label">Grupo</label>
+                    <div class="col-md-3">
+                        <select asp-for="CdGrupo" class="form-control col-lg-2" asp-items="ViewBag.ListaGrupos"></select>
+                    </div>
+                    <label class="col-md-2 control-label">Evento</label>
+                    <div class="col-md-3">
+                        <select asp-for="IdGrupoEvento" class="form-control col-lg-2" asp-items="ViewBag.ListaEventos"></select>
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(@ViewBag.Mensagem))
+            {
+                if (ViewBag.Codigo != 0)
+                {
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+                }
+                else
+                {
+                    <div class="alert alert-success" role="alert">@ViewBag.Mensagem</div>
+                }
+            }
+
+        </div>
+        <div class="panel-footer">
+
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
+        </div>
+    </div>
+</form>

@@ -20,9 +20,9 @@ namespace AlienTorpedoAPI.Controllers
             _dbcontext = dbContext;
         }
 
-        // POST: api/Sorteio/Sortiar
+        // POST: api/Sorteio/Sortear
         [HttpPost]
-        public string Sortiar([FromBody]GrupoEvento grupoEvento)
+        public string Sortear([FromBody]GrupoEvento grupoEvento)
         {
             int cdEvento = 0;
             string result;
