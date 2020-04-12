@@ -9,7 +9,8 @@ namespace AlienTorpedoSite.Models
     public class TipoEvento
     {
         public short? CdTipoEvento { get; set; }
-        [Required(ErrorMessage = "Preenchimento Obrigatório")]
+        [Display(Name = "Nome")]
+        [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
         public string NmTipoEvento { get; set; }
     }
 }

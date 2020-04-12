@@ -9,9 +9,10 @@ namespace AlienTorpedoSite.ViewModels.Grupo
         public int IdGrupoEvento { get; set; }
 
         public int cdGrupo { get; set; }
-
+        //public int cdEvento { get; set; }
+        [Display(Name = "Data Evento")]
         public DateTime dtEvento { get; set; }
-
+        [Display(Name = "Descrição")]
         public string nmEvento { get; set; }
 
         public string nmEndereco { get; set; }

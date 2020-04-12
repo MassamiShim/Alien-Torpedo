@@ -9,10 +9,12 @@ namespace AlienTorpedoSite.Models.Grupo
     public class Grupo
     {
         public int? CdGrupo { get; set; }
-        [Required(ErrorMessage = "Preenchimento Obrigatório")]
+        [Display(Name = "Grupo")]
+        [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
         public string NmGrupo { get; set; }
        
-        [Required(ErrorMessage = "Preenchimento Obrigatório")]
+        [Display(Name = "Data Inclusão")]
+        [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
         public DateTime DtInclusao { get; set; }
     }
 }

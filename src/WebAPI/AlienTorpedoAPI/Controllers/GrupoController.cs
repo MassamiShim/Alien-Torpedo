@@ -41,19 +41,21 @@ namespace AlienTorpedoAPI.Controllers
             return Ok("Grupo cadastrado com sucesso!");
         }
 
-        // POST api/Grupo/CadastraGrupoEvento
+        // POST api/Grupo/AtrelarGrupoEvento
         [HttpPost]
-        public IActionResult CadastraGrupoEvento([FromBody]GrupoEvento group)
+        public JsonResult AtrelarGrupoEvento([FromBody]GrupoEvento group)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
+                //return BadRequest();
             }
 
             _dbcontext.Add(group);
             _dbcontext.SaveChanges();
 
-            return Ok("Grupo Evento cadastrado com sucesso!");
+            //return Ok("Vinculação realizada com sucesso!");
+            return Json(new { cdretorno = 0, mensagem = "Vinculação realizada com sucesso!" });            
         }
     }
 }

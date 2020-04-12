@@ -1,4 +1,4 @@
-﻿@model AlienTorpedoSite.ViewModels.Grupo.GrupoViewModel
+﻿@model AlienTorpedoSite.Models.Grupo.GrupoEvento
 
 @{
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
@@ -9,30 +9,55 @@
 <h3>@ViewData["Message"]</h3>
 
 <form asp-action="AtrelarEvento">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">Teste Manero</h3>
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Atrelar Evento a um Grupo</h3>
         </div>
         <div class="panel-body">
             <div class="form-horizontal">
                 <div class="form-group">
-                    @*<label asp-for="IdGrupoEvento" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <span class="form-control">@Model.IdGrupoEvento</span>
-                    </div>*@
-                    <textarea asp-for="IdGrupoEvento">@Model.IdGrupoEvento</textarea>
+                    <label class="col-md-1 control-label">Grupo</label>
+                    <div class="col-md-3">
+                        <select asp-for="CdGrupo" class="form-control col-lg-2" asp-items="ViewBag.ListaGrupos"></select>
+                    </div>
+                    <label class="col-md-2 control-label">Evento</label>
+                    <div class="col-md-3">
+                        <select asp-for="CdEvento" class="form-control col-lg-2" asp-items="ViewBag.ListaEventos"></select>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="NmDescricao" class="col-md-1 control-label"></label>
+                    <div class="col-md-3">
+                        <input asp-for="NmDescricao" type="text" class="form-control col-lg-2" placeholder="Descrição" required />
+                        <span asp-validation-for="NmDescricao" class="text-danger"></span>
+                    </div>
+                    <label asp-for="DtEvento" class="col-md-2 control-label"></label>
+                    <div class="col-md-3">
+                        <input type="date" asp-for="DtEvento" class="form-control" required/>
+                        <span asp-validation-for="DtEvento" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        @if (ViewBag.nmEvento != null)
+
+            @if(!string.IsNullOrEmpty(@ViewBag.Mensagem))
             {
-                if (ViewBag.nmEvento != 0)
+                if (ViewBag.Codigo != 0)
                 {
-                <div class="alert alert-danger" role="alert">@ViewBag.nmEvento</div>
+                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
+                }
+                else
+                {
+                    <div class="alert alert-success" role="alert">@ViewBag.Mensagem</div>
+                }
             }
-        }
-        <div>
-            <input type="submit" class="btn btn-info" value="Atualizar" />
+
+        </div>
+        <div class="panel-footer">
+
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
         </div>
     </div>
 </form>

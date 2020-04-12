@@ -1,4 +1,5 @@
 ﻿using AlienTorpedoSite.Models.Grupo;
+using AlienTorpedoSite.Models.Utilidades;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,5 +39,18 @@ namespace AlienTorpedoSite.Application.AppServices
 
             return response.ToString();
         }
+
+        public Retorno AtrelarGrupoEvento(GrupoEvento grupo)
+        {
+            string url = _baseAppService.GetUrlApi() + "api/Grupo/AtrelarGrupoEvento";
+            var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
+            var response = _http.PostAsync(url, stringContent).Result;
+
+            var json = response.Content.ReadAsStringAsync();
+            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+
+            return retorno;
+        }
+
     }
 }
