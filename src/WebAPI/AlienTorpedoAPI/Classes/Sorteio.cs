@@ -35,46 +35,58 @@ namespace AlienTorpedoAPI.Classes
             var varGrupoEvento = dbContext.GrupoEvento.FirstOrDefault(u => u.IdGrupoEvento == idGrupoEvento);
 
             //Na forma atual, o comando ira realizar um select sem where na base, para depois aplicar o filtro
-            var evento = dbContext.Evento
-            .GroupJoin(dbContext.GrupoEvento,
-                 e => e.CdEvento,
-                ge => ge.CdEvento,
-                (e, ge) => new
-                {
-                    e,
-                    grupo = ge.Where(w => w.CdGrupo == varGrupoEvento.CdGrupo)
-                })
-            .GroupBy(g => new
-            {
-                CodEvento = g.e.CdEvento,
-                Qtd = g.grupo.Count()
-            })
-            .Select(s => new
-            {
-                s.Key.CodEvento,
-                s.Key.Qtd
-            })
-            .DefaultIfEmpty()
-            .ToList();
+            //var evento = dbContext.Evento
+            //.GroupJoin(dbContext.GrupoEvento,
+            //     e => e.CdEvento,
+            //    ge => ge.CdEvento,
+            //    (e, ge) => new
+            //    {
+            //        e,
+            //        grupo = ge.Where(w => w.CdGrupo == varGrupoEvento.CdGrupo)
+            //    })
+            //.GroupBy(g => new
+            //{
+            //    CodEvento = g.e.CdEvento,
+            //    Qtd = g.grupo.Count()
+            //})
+            //.Select(s => new
+            //{
+            //    s.Key.CodEvento,
+            //    s.Key.Qtd
+            //})
+            //.DefaultIfEmpty()
+            //.ToList();
 
-            Random rand = new Random();
-            int max = 0, count = 0, sum = 0, target = 0;
-            count = evento.Count();
-            sum = evento.Sum(s => s.Qtd);
-            max = count * 10 - sum;
-            target = rand.Next(1, max);
+            //Select ge.Cd_evento, Count(1)
+            //From Evento ev
+            //Inner Join Grupo_evento ge On
+            //    ge.Cd_evento = ev.Cd_evento
+            //Where
+            //    ge.Cd_grupo = 1
+            //Group By ge.Cd_evento
 
-            foreach (var item in evento.Select(s => new { s.CodEvento, s.Qtd }))
-            {
-                if ((10 - item.Qtd) >= target)
-                {
-                    grupoEvento.CdEvento = item.CodEvento;
-                    GravaSorteio(dbContext, varGrupoEvento, item.CodEvento.Value);
-                    return item.CodEvento.Value;
-                }
-                else
-                    target -= (10 - item.Qtd);
-            }
+            //var query = from ev in dbContext.Evento
+            //            group ev by ev.CdTipoEvento
+            //            into teste
+
+            //Random rand = new Random();
+            //int max = 0, count = 0, sum = 0, target = 0;
+            //count = evento.Count();
+            //sum = evento.Sum(s => s.Qtd);
+            //max = count * 10 - sum;
+            //target = rand.Next(1, max);
+
+            //foreach (var item in evento.Select(s => new { s.CodEvento, s.Qtd }))
+            //{
+            //    if ((10 - item.Qtd) >= target)
+            //    {
+            //        grupoEvento.CdEvento = item.CodEvento;
+            //        GravaSorteio(dbContext, varGrupoEvento, item.CodEvento.Value);
+            //        return item.CodEvento.Value;
+            //    }
+            //    else
+            //        target -= (10 - item.Qtd);
+            //}
             return 0;
         }
 

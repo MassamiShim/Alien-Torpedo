@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AlienTorpedoAPI.Classes;
 using AlienTorpedoAPI.Models;
+using Microsoft.Extensions.Logging;
 
 namespace AlienTorpedoAPI.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/[controller]/[Action]")]
-    public class SorteioController : Controller
+    [ApiController]
+    //[Produces("application/json")]
+    [Route("api/[controller]")]
+    public class SorteioController : ControllerBase
     {
 
         private readonly dbAlienContext _dbcontext;
+
         public SorteioController(dbAlienContext dbContext)
         {
             _dbcontext = dbContext;
