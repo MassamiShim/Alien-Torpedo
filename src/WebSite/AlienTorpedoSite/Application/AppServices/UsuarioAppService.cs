@@ -47,11 +47,21 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public Retorno AutentificarUsuario(string NmEmail, string NmSenha)
         {
-            string url = _baseAppService.GetUrlApi() + String.Format("api/Usuario/AutenticarUsuario?NmEmail={0}&NmSenha={1}", NmEmail, NmSenha);
-            var response = _http.GetAsync(url).Result;
+            Retorno retorno = new Retorno();
 
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            try
+            {
+                string url = _baseAppService.GetUrlApi() + String.Format("api/Usuario/AutenticarUsuario?NmEmail={0}&NmSenha={1}", NmEmail, NmSenha);
+                var response = _http.GetAsync(url).Result;
+
+                var json = response.Content.ReadAsStringAsync();
+                retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            }
+            catch(Exception ex)
+            {
+                retorno.cdretorno = 1;
+                retorno.mensagem = "Não foi possível realizar a autentificação. Tente mais tarde!";
+            }
 
             return retorno;
         }

@@ -40,5 +40,11 @@ namespace AlienTorpedoSite.Controllers
             var retorno = _eventoAppService.SortearEvento(evento);            
             return RedirectToAction("Sortear");
         }
+
+        [HttpGet]
+        public IActionResult Detalhar()
+        {
+            return View();
+        }
     }
 }

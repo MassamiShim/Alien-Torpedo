@@ -2,9 +2,11 @@
 using AlienTorpedoSite.Models;
 using AlienTorpedoSite.Models.Evento;
 using AlienTorpedoSite.Models.Grupo;
+using AlienTorpedoSite.Models.Utilidades;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,11 +65,8 @@ namespace AlienTorpedoSite.Application.AppServices
         public GrupoEvento SortearEvento(GrupoEvento evento)
         {
             string url = _baseAppService.GetUrlApi() + "api/Sorteio/Sortear";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
-
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<GrupoEvento>(json.Result);
+            var response = _http.GetStringAsync(url);
+            var retorno = JsonConvert.DeserializeObject<GrupoEvento>(response.Result);
 
             return retorno;
         }

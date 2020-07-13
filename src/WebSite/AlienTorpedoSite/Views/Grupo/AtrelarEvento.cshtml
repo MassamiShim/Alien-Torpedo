@@ -4,10 +4,7 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
+<br /><br />
 <form asp-action="AtrelarEvento">
     <div class="panel panel-primary" style="border-color: black;">
         <div class="panel-heading" style="background: black;">
@@ -27,10 +24,10 @@
 
                 </div>
                 <div class="form-group">
-                    <label asp-for="NmDescricao" class="col-md-1 control-label"></label>
+                    <label asp-for="NmEvento" class="col-md-1 control-label"></label>
                     <div class="col-md-3">
-                        <input asp-for="NmDescricao" type="text" class="form-control col-lg-2" placeholder="Descrição" required />
-                        <span asp-validation-for="NmDescricao" class="text-danger"></span>
+                        <input asp-for="NmEvento" type="text" class="form-control col-lg-2" placeholder="Descrição" required />
+                        <span asp-validation-for="NmEvento" class="text-danger"></span>
                     </div>
                     <label asp-for="DtEvento" class="col-md-2 control-label"></label>
                     <div class="col-md-3">

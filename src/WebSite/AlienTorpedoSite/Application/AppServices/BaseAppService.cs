@@ -17,7 +17,7 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public string GetUrlApi()
         {
-            string urlApi = _configuration.GetValue<string>("UrlAlienApi");
+            string urlApi = _configuration.GetValue<string>("Url_AlienTorpedoAPI");
             return urlApi;
         }
     }
