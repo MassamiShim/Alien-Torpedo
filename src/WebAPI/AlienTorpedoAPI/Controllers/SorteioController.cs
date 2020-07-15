@@ -22,15 +22,13 @@ namespace AlienTorpedoAPI.Controllers
 
         // POST: api/Sorteio/Sortear
         [HttpPost]
-        public string Sortear([FromBody]GrupoEvento grupoEvento)
+        public IActionResult Sortear([FromBody]GrupoEvento grupoEvento)
         {
-            int cdEvento = 0;
-            string result;
             Sorteio sorteio = new Sorteio();
-            cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
-            result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
+            int cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
+            var result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
 
-            return result;
+            return Ok(result);
         }
     }
 }

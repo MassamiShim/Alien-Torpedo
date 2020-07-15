@@ -104,31 +104,53 @@ namespace AlienTorpedoAPI.Classes
             dbContext.SaveChanges();
         }
 
-        public string BuscaSorteio(dbAlienContext dbContext, GrupoEvento grupoEvento)
+        //public string BuscaSorteio(dbAlienContext dbContext, GrupoEvento grupoEvento)
+        //{
+        //    int cdEvento = 0;
+        //    cdEvento = (int)grupoEvento.CdEvento;
+
+        //    var dado = new
+        //    {
+        //        resultado =
+        //        dbContext.GrupoEvento.Where(w => w.IdGrupoEvento == grupoEvento.IdGrupoEvento)
+        //        .Join(dbContext.Evento,
+        //              ge => ge.CdEvento,
+        //              e => e.CdEvento,
+        //              (ge, e) => new { ge, e }
+        //        )
+        //        .Select(s => new
+        //        {
+        //            s.ge.IdGrupoEvento,
+        //            s.ge.CdGrupo,
+        //            s.ge.DtEvento,
+        //            s.e.NmEvento,
+        //            s.e.NmEndereco,
+        //            s.e.VlEvento
+        //        })
+        //    };
+        //    return JsonConvert.SerializeObject(dado);
+        //}
+
+        public List<GrupoEventoViewModel> BuscaSorteio(dbAlienContext dbContext, GrupoEvento grupoEvento)
         {
             int cdEvento = 0;
             cdEvento = (int)grupoEvento.CdEvento;
 
-            var dado = new
-            {
-                resultado =
-                dbContext.GrupoEvento.Where(w => w.IdGrupoEvento == grupoEvento.IdGrupoEvento)
-                .Join(dbContext.Evento,
-                      ge => ge.CdEvento,
-                      e => e.CdEvento,
-                      (ge, e) => new { ge, e }
-                )
-                .Select(s => new
-                {
-                    s.ge.IdGrupoEvento,
-                    s.ge.CdGrupo,
-                    s.ge.DtEvento,
-                    s.e.NmEvento,
-                    s.e.NmEndereco,
-                    s.e.VlEvento
-                })
-            };
-            return JsonConvert.SerializeObject(dado);
+            var resultado = (from ge in dbContext.GrupoEvento.Where(w => w.IdGrupoEvento == grupoEvento.IdGrupoEvento)
+                            join e in dbContext.Evento on
+                                new { ge.CdEvento } equals new { e.CdEvento }
+                            select new GrupoEventoViewModel() 
+                            {
+                                IdGrupoEvento = ge.IdGrupoEvento,
+                                CdGrupo  = ge.CdGrupo,
+                                DtEvento = ge.DtEvento,
+                                NmEvento = e.NmEvento,
+                                NmEndereco = e.NmEndereco,
+                                VlEvento = e.VlEvento
+                            }).ToList();
+
+            return resultado;
         }
+
     }
 }

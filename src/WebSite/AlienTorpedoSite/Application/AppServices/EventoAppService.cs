@@ -45,9 +45,8 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public List<Evento> ObtemListaEventos()
         {
-            HttpClient client = new HttpClient();
             string url = _baseAppService.GetUrlApi() + "api/Evento/ListaEventos";
-            var response = client.GetStringAsync(url);
+            var response = _http.GetStringAsync(url);
             var lstEventos = JsonConvert.DeserializeObject<List<Evento>>(response.Result);
 
             return lstEventos;
@@ -62,11 +61,14 @@ namespace AlienTorpedoSite.Application.AppServices
             return response.ToString();
         }
 
-        public GrupoEvento SortearEvento(GrupoEvento evento)
+        public List<GrupoEvento> SortearEvento(GrupoEvento evento)
         {
             string url = _baseAppService.GetUrlApi() + "api/Sorteio/Sortear";
-            var response = _http.GetStringAsync(url);
-            var retorno = JsonConvert.DeserializeObject<GrupoEvento>(response.Result);
+            var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
+            var response = _http.PostAsync(url, stringContent).Result;
+            string json = response.Content.ReadAsStringAsync().Result;
+
+            var retorno = JsonConvert.DeserializeObject<List<GrupoEvento>>(json);
 
             return retorno;
         }

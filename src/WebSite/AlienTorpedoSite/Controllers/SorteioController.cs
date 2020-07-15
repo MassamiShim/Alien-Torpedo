@@ -22,6 +22,7 @@ namespace AlienTorpedoSite.Controllers
             _grupoAppService = grupoAppService;
         }
 
+        [HttpGet]
         public IActionResult Sortear()
         {
             var lstGrupos = _grupoAppService.ListaGrupos();
@@ -36,9 +37,8 @@ namespace AlienTorpedoSite.Controllers
         [HttpPost]
         public IActionResult Sortear(GrupoEvento evento)
         {
-
-            var retorno = _eventoAppService.SortearEvento(evento);            
-            return RedirectToAction("Sortear");
+            var model = _eventoAppService.SortearEvento(evento);            
+            return PartialView("DetalhesSorteio", model);
         }
 
         [HttpGet]

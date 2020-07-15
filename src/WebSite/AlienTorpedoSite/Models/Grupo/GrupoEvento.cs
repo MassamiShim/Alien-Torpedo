@@ -18,9 +18,9 @@ namespace AlienTorpedoSite.Models.Grupo
 
         [Display(Name = "Data Evento")]
         [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
-        public DateTime DtEvento { get; set; }
+        public DateTime? DtEvento { get; set; }
         public string NmEndereco { get; set; }
-        public int VlEvento { get; set; }
+        public double? VlEvento { get; set; }
 
 
     }
