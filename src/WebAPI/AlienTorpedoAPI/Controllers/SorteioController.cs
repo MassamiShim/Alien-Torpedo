@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AlienTorpedoAPI.Classes;
 using AlienTorpedoAPI.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace AlienTorpedoAPI.Controllers
 {
@@ -15,20 +16,27 @@ namespace AlienTorpedoAPI.Controllers
     {
 
         private readonly dbAlienContext _dbcontext;
-        public SorteioController(dbAlienContext dbContext)
+        private readonly IConfiguration _configuration;
+        public SorteioController(dbAlienContext dbContext, IConfiguration configuration)
         {
             _dbcontext = dbContext;
+            _configuration = configuration;
         }
 
         // POST: api/Sorteio/Sortear
         [HttpPost]
         public IActionResult Sortear([FromBody]GrupoEvento grupoEvento)
         {
-            Sorteio sorteio = new Sorteio();
+            Sorteio sorteio = new Sorteio(_configuration);
             int cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
-            var result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
+            var result = new List<GrupoEventoViewModel>();
 
-            return Ok(result);
+            if (cdEvento == 0)           
+                return Json(new { cdretorno = 1, mensagem = "O evento selecionado não está atrelado a este grupo!", data = result });            
+
+            result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
+
+            return Json(new { cdretorno = 0, mensagem = "Sucesso!", data = result });
         }
     }
 }

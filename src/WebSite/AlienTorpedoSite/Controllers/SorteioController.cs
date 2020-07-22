@@ -34,11 +34,18 @@ namespace AlienTorpedoSite.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Sortear(GrupoEvento evento)
+        [HttpGet]
+        public IActionResult SortearEvento(int CdGrupo, int IdGrupoEvento)
         {
-            var model = _eventoAppService.SortearEvento(evento);            
-            return PartialView("DetalhesSorteio", model);
+            var evento = new GrupoEvento()
+            {
+                CdGrupo = CdGrupo,
+                IdGrupoEvento = IdGrupoEvento
+            };
+
+            var model = _eventoAppService.SortearEvento(evento);    
+            
+            return PartialView("_DetalheSorteio", model);
         }
 
         [HttpGet]

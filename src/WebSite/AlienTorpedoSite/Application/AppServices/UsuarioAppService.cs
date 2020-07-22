@@ -57,7 +57,7 @@ namespace AlienTorpedoSite.Application.AppServices
                 var json = response.Content.ReadAsStringAsync();
                 retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 retorno.cdretorno = 1;
                 retorno.mensagem = "Não foi possível realizar a autentificação. Tente mais tarde!";

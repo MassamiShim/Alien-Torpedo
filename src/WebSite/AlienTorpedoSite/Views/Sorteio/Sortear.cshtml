@@ -4,8 +4,8 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-<br /><br />
-<form asp-action="Sortear">
+<br />
+<br />
     <div class="panel panel-primary" style="border-color: black;">
         <div class="panel-heading" style="background: black;">
             <h3 class="panel-title">Sortear Evento</h3>
@@ -22,26 +22,43 @@
                         <select asp-for="IdGrupoEvento" class="form-control col-lg-2" asp-items="ViewBag.ListaEventos"></select>
                     </div>
                 </div>
+                <div id="frmResultSorteio"></div>                
             </div>
-
-            @if (!string.IsNullOrEmpty(@ViewBag.Mensagem))
-            {
-                if (ViewBag.Codigo != 0)
-                {
-                    <div class="alert alert-danger" role="alert">@ViewBag.Mensagem</div>
-                }
-                else
-                {
-                    <div id="divEventoSorteado"></div>
-                }
-            }
-
         </div>
         <div class="panel-footer">
 
             <div style="text-align:right">
-                <input type="submit" class="btn btn-info" value="Cadastrar" />
+                <input type="submit" class="btn btn-info" id="btnSortear" value="Sortear" onclick="Sortear();" />
             </div>
         </div>
     </div>
-</form>
+
+    <script>
+
+    function Sortear() {
+        //var CdGrupo = $("#CdGrupo").val();
+        //var IdGrupoEvento = $("#IdGrupoEvento").val();
+        //url =  "Sorteio/SortearEvento?CdGrupo=" + CdGrupo + "&IdGrupoEvento=" + IdGrupoEvento;
+
+        //$("#frmResultSorteio").load('http://localhost:63099/Sorteio/SortearEvento?CdGrupo=1&IdGrupoEvento=1');
+
+        $.ajax({
+            url: '@Url.Action("SortearEvento")?CdGrupo=' + $('#CdGrupo').val() + "&IdGrupoEvento="+ $('#IdGrupoEvento').val(),
+            type: 'GET',
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+
+            },
+            success: function (result) {
+
+                $('#frmResultSorteio').html(result);
+                $('#frmResultSorteio').show();
+            }
+        });
+
+
+
+
+    }
+
+    </script>

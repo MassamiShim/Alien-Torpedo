@@ -1,0 +1,42 @@
+﻿@model AlienTorpedoSite.ViewModels.Grupo.GrupoEventoViewModel
+
+<style>
+    th{
+        text-align: center;
+    }
+    .td-centralizada{
+        text-align: center;
+    }
+</style>
+
+<table class="table table-bordered" style="width: 94%;">
+    <tr>
+        <th width="25%">Evento</th>
+        <th width="25%">Endereço</th>
+        <th width="22%">Data</th>
+        <th width="22%">Valor do Evento</th>
+    </tr>
+    @if (@Model.cdretorno == 1)
+    {
+        if (!string.IsNullOrEmpty(@Model.mensagem))
+        {
+            <div style="width: 94%; margin-bottom: 5px;" class="alert alert-danger" role="alert">@Model.mensagem</div>
+
+        }
+    }
+    else
+    {
+        foreach (var item in Model.data)
+        {
+            string data = @item.DtEvento.HasValue ? @item.DtEvento.Value.ToString("dd/MM/yyyy") : "";
+
+            <tr>
+                <td>@item.NmEvento</td>
+                <td>@item.NmEndereco</td>
+                <td class="td-centralizada">@data</td>
+                <td>@item.VlEvento</td>
+            </tr>
+
+        }
+    }
+</table>
