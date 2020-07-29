@@ -11,6 +11,7 @@ namespace AlienTorpedoSite.Models.Grupo
         public int? CdGrupo { get; set; }
         [Display(Name = "Grupo")]
         [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
+        [StringLength(60, MinimumLength = 5, ErrorMessage = "O nome do [{0}] deve ter no mínimo 5 e no máximo 60 caractéres!")]
         public string NmGrupo { get; set; }
        
         [Display(Name = "Data Inclusão")]

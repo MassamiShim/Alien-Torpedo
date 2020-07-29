@@ -56,6 +56,13 @@ namespace AlienTorpedoAPI.Controllers
 
             try
             {
+                 bool emailCadastrado = _dbcontext.Usuario.Count(x => x.NmEmail == user.NmEmail) > 0;
+
+                if (emailCadastrado)
+                {
+                    return Json(new { cdretorno = 1, mensagem = "Este e-mail já está sendo utilizado por outro usuário, favor verificar!" });
+                }
+
                 user.CdUsuario = null;
                 user.NmSenha = Senha.CriptografaSenha(user.NmSenha.ToString());
                 user.DtInclusao = DateTime.Now;
