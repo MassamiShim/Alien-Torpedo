@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace AlienTorpedoAPI.Models
 {
@@ -11,7 +12,7 @@ namespace AlienTorpedoAPI.Models
             Evento = new HashSet<Evento>();
             GrupoUsuario = new HashSet<GrupoUsuario>();
         }
-
+       
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int? CdUsuario { get; set; }
         public string NmEmail { get; set; }

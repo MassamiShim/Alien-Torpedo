@@ -1,8 +1,85 @@
-﻿@{
-    <!-- Informando layout a ser utilizado caso o user esteja logado -->
+﻿@model AlienTorpedoSite.Models.Evento.Evento
+
+@{
     Layout = "_Layout_logado";
 }
+<br />
+<br />
+<form method="post" asp-controller="Evento" asp-action="Cadastrar">
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Cadastrar Evento</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="NmEvento" class="col-md-1 control-label">Evento</label>
+                    <div class="col-md-4">
+                        <input asp-for="NmEvento" class="form-control col-lg-2" placeholder="Nome Grupo" required />
+                        <span asp-validation-for="NmEvento" class="text-danger"></span>
+                    </div>
 
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+                    <label class="col-md-2 control-label">Tipo Evento</label>
+                    <div class="col-md-3">
+                        <select asp-for="CdTipoEvento" class="form-control col-lg-2" asp-items="ViewBag.TiposEvento"></select>
+                    </div>
 
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NmEndereco" class="col-md-1 control-label">Endereço</label>
+                    <div class="col-md-4">
+                        <input asp-for="NmEndereco" class="form-control col-lg-4" placeholder="Endereço" required />
+                        <span asp-validation-for="NmEndereco" class="text-danger"></span>
+                    </div>
+                    <label asp-for="DvParticular" class="col-md-2 control-label">Particular</label>
+                    <div class="col-md-3">
+                        <select class="form-control col-lg-3">
+                            <option value="0">Não</option>
+                            <option value="1">Sim</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-group">                  
+                    <label asp-for="VlNota" class="col-md-1 control-label">Nota</label>
+                    <div class="col-md-1">
+                        <input asp-for="VlNota" class="form-control col-lg-1" placeholder="Nota" />
+                    </div>
+
+                    <label asp-for="VlEvento" class="col-md-1 control-label">Peso</label>
+                    <div class="col-md-1">
+                        <input asp-for="VlEvento" class="form-control col-lg-1" placeholder="Peso" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (ViewBag.Codigo == 0)
+{
+    <div class="alert alert-success">
+        @ViewBag.Mensagem
+    </div>
+}
+
+@if (ViewBag.Codigo == 1)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Mensagem
+    </div>
+}
+
+
+@section Scripts
+    {
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}

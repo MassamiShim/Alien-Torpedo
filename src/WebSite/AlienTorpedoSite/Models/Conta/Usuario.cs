@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using AlienTorpedoSite.Models.Evento;
 
 namespace AlienTorpedoSite.Models.Conta
 {
@@ -25,6 +26,5 @@ namespace AlienTorpedoSite.Models.Conta
 
         [Required]
         public DateTime DtInclusao { get; set; }
-        
     }
 }
