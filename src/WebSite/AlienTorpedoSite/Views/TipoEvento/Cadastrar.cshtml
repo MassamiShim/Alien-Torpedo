@@ -1,7 +1,52 @@
-﻿@{
+﻿@model AlienTorpedoSite.Models.TipoEvento
+
+@{
     Layout = "_Layout_logado";
 }
 
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<br />
+<br />
+<form method="post" asp-controller="TipoEvento" asp-action="Cadastrar">
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Cadastrar Tipo de Evento</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label asp-for="NmTipoEvento" class="col-md-1 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="NmTipoEvento" class="form-control" placeholder="Nome Tipo Evento" required />
+                        <span asp-validation-for="NmTipoEvento" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
 
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" value="Cadastrar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (ViewBag.Codigo == 0)
+{
+    <div class="alert alert-success">
+        @ViewBag.Mensagem
+    </div>
+}
+
+@if (ViewBag.Codigo == 1)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Mensagem
+    </div>
+}
+
+
+@section Scripts
+    {
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+}

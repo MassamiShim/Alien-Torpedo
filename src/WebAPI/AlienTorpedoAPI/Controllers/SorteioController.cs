@@ -6,66 +6,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AlienTorpedoAPI.Classes;
 using AlienTorpedoAPI.Models;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace AlienTorpedoAPI.Controllers
 {
-    [ApiController]
-    //[Produces("application/json")]
-    [Route("api/[controller]")]
-    public class SorteioController : ControllerBase
+    [Produces("application/json")]
+    [Route("api/[controller]/[Action]")]
+    public class SorteioController : Controller
     {
 
         private readonly dbAlienContext _dbcontext;
-
-        public SorteioController(dbAlienContext dbContext)
+        private readonly IConfiguration _configuration;
+        public SorteioController(dbAlienContext dbContext, IConfiguration configuration)
         {
             _dbcontext = dbContext;
+            _configuration = configuration;
         }
 
-        // GET: api/Sorteio
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Sorteio/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Sorteio/Post
+        // POST: api/Sorteio/Sortear
         [HttpPost]
-        public string Post([FromBody]GrupoEvento grupoEvento)
+        public IActionResult Sortear([FromBody]GrupoEvento grupoEvento)
         {
-            int cdEvento = 0;
-            string result;
-            Sorteio sorteio = new Sorteio();
-            cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
+            Sorteio sorteio = new Sorteio(_configuration);
+            int cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
+            var result = new List<GrupoEventoViewModel>();
+
+            if (cdEvento == 0)           
+                return Json(new { cdretorno = 1, mensagem = "O evento selecionado n�o est� atrelado a este grupo!", data = result });            
+
             result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
-            return result;
-        }
 
-        //[HttpPost]
-        //public void Post([FromBody]int id)
-        //{
-        //    Sorteio sorteio = new Sorteio();
-        //    sorteio.GeraSorteio(id, _dbcontext);
-        //}
-
-        // PUT: api/Sorteio/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Json(new { cdretorno = 0, mensagem = "Sucesso!", data = result });
         }
     }
 }

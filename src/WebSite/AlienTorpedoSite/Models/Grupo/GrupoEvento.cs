@@ -5,19 +5,21 @@ namespace AlienTorpedoSite.Models.Grupo
 {
     public class GrupoEvento
     {
-        [Key]
-        [Required]
-        public int IdGrupoEvento { get; set; }
+        public int? IdGrupoEvento { get; set; }
 
         public int CdGrupo { get; set; }
 
         public int CdEvento { get; set; }
 
-        [StringLength(80)]
-        public string NmDescricao { get; set; }
+        [Display(Name = "Descrição")]
+        [StringLength(80, MinimumLength = 10, ErrorMessage = "O campo [{0}] deve ter no mínimo 10 e no máximo 80 caractéres!")]        
+        [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
+        public string NmEvento { get; set; }
 
-        [Required]
-        public DateTime DtEvento { get; set; }
-        
+        [Display(Name = "Data Evento")]
+        [Required(ErrorMessage = "O campo [{0}] é obrigatório!")]
+        public DateTime? DtEvento { get; set; }
+        public string NmEndereco { get; set; }
+        public double? VlEvento { get; set; }
     }
 }

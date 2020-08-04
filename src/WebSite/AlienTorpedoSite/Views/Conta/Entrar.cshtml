@@ -1,11 +1,8 @@
 ﻿@model AlienTorpedoSite.ViewModels.Conta.EntrarViewModel
-
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
+<br /><br />
 <form asp-action="Entrar">
-    <div class="panel panel-info">
-        <div class="panel-heading">
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
             <h3 class="panel-title">Para acessar nosso sistema, informe e-mail e senha:</h3>
         </div>
         <div class="panel-body">
@@ -23,28 +20,25 @@
                     </div>
                 </div>
             </div>
+            @if (ViewBag.Codigo == 0)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.Mensagem
+                </div>
+            }
+            else if (ViewBag.Codigo == 1)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Mensagem
+                </div>
+            }
         </div>
         <div class="panel-footer">
             <div>
                 <input type="submit" class="btn btn-info" value="Acessar" />
             </div>
         </div>
-    </div>
-
-    @if (ViewBag.Codigo == 0)
-    {
-        <div class="alert alert-success">
-            @ViewBag.Mensagem
-        </div>
-    }
-    
-    @if (ViewBag.Codigo == 1)
-    {
-        <div class="alert alert-danger">
-            @ViewBag.Mensagem
-        </div>
-    }
-
+    </div> 
 </form>
 
 @section Scripts
