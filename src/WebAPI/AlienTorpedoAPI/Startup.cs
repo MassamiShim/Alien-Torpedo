@@ -35,9 +35,8 @@ namespace AlienTorpedoAPI
         {
             services.AddControllers();
 
-            //Vinicius - Injeção de dependência no dbContext - INI 
+            services.AddMvc();
             services.AddDbContext<dbAlienContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //Vinicius - Injeção de dependência no dbContext - FIM
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
