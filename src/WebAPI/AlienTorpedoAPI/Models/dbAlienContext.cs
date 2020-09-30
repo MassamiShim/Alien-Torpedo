@@ -6,10 +6,8 @@ namespace AlienTorpedoAPI.Models
 {
     public partial class dbAlienContext : DbContext
     {
-        //Vinicius - Construtur para setar a connectionString no dbcontext - INI 
         public dbAlienContext(DbContextOptions<dbAlienContext> options) : base(options)
         { }
-        //Vinicius - Construtur para setar a connectionString no dbcontext - FIM
 
         public virtual DbSet<Evento> Evento { get; set; }
         public virtual DbSet<Grupo> Grupo { get; set; }
@@ -17,7 +15,7 @@ namespace AlienTorpedoAPI.Models
         public virtual DbSet<GrupoUsuario> GrupoUsuario { get; set; }
         public virtual DbSet<TipoEvento> TipoEvento { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-
+        public virtual DbSet<EventoSorteado> EventoSorteado { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Evento>(entity =>
@@ -84,22 +82,29 @@ namespace AlienTorpedoAPI.Models
                 entity.Property(e => e.IdGrupoEvento)
                     .HasColumnName("Id_grupo_evento");
 
-                entity.Property(e => e.CdEvento).HasColumnName("Cd_evento");
-
                 entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
 
-                entity.Property(e => e.DtEvento)
-                    .HasColumnName("Dt_evento")
+                entity.Property(e => e.DtCadastro)
+                    .HasColumnName("Dt_cadastro")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DtInicio)
+                    .HasColumnName("Dt_inicio")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.NmDescricao)
                     .HasColumnName("Nm_descricao")
                     .HasColumnType("varchar(80)");
 
-                entity.HasOne(d => d.CdEventoNavigation)
-                    .WithMany(p => p.GrupoEvento)
-                    .HasForeignKey(d => d.CdEvento)
-                    .HasConstraintName("fk_grupo_evento_evento");
+                entity.Property(e => e.DvRecorrente)
+                    .HasColumnName("Dv_recorrente")
+                    .HasColumnType("bit");
+
+                entity.Property(e => e.VlRecorrencia)
+                    .HasColumnName("Vl_recorrencia");
+
+                entity.Property(e => e.VlDiasRecorrencia)
+                    .HasColumnName("Vl_dias_recorrencia");
 
                 entity.HasOne(d => d.CdGrupoNavigation)
                     .WithMany(p => p.GrupoEvento)
@@ -172,6 +177,27 @@ namespace AlienTorpedoAPI.Models
                 entity.Property(e => e.NmUsuario)
                     .HasColumnName("Nm_usuario")
                     .HasColumnType("varchar(80)");
+            });
+
+            modelBuilder.Entity<EventoSorteado>(entity =>
+            {
+                entity.HasKey(e => e.IdEventoSorteado)
+                    .HasName("Id_evento_sorteado");
+
+                entity.ToTable("Evento_sorteado");
+
+                entity.Property(e => e.IdEventoSorteado)
+                    .HasColumnName("Id_evento_sorteado");
+
+                entity.Property(e => e.IdGrupoEvento)
+                    .HasColumnName("id_grupo_evento");
+
+                entity.Property(e => e.CdEvento)
+                    .HasColumnName("Cd_evento");
+
+                entity.Property(e => e.DtEvento)
+                    .HasColumnName("Dt_evento")
+                    .HasColumnType("datetime");
             });
         }
     }

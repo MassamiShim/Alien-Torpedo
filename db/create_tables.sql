@@ -1,15 +1,10 @@
-/*
-Project: Alien-Torpedo
-Description: create tables
-Author: Renato Crudo
-Date: 08/08/2017
-*/
-
 use dbAlien;
 
 Go
 
 /*
+If OBJECT_ID('Evento_sorteado') is not null Drop table Evento_sorteado
+
 If OBJECT_ID('Grupo_evento') is not null Drop table Grupo_evento
 
 If OBJECT_ID('Evento') is not null Drop table Evento
@@ -75,10 +70,10 @@ Create table Evento
 	,Vl_evento float
 	,Vl_nota float
 	,Dv_particular bit
-	,Cd_usuario int
+	,Cd_grupo int
 	Constraint pk_cd_evento primary key(Cd_evento)
 	,Constraint fk_Evento_Tipo_evento_cd_tipo_evento foreign key(Cd_tipo_evento) references Tipo_evento
-	,Constraint fk_Evento_usuario_cd_usuario foreign key(Cd_usuario) references Usuario
+	,Constraint fk_Evento_Grupo_cd_grupo foreign key(Cd_grupo) references Grupo
 )
 go 
 
@@ -87,10 +82,23 @@ Create Table Grupo_evento
 (
 	Id_grupo_evento int identity(1, 1)
 	,Cd_grupo		int
-	,Cd_evento		int
 	,Nm_descricao	varchar(80)
-	,Dt_evento		datetime
+	,Dt_cadastro	datetime
+	,Dt_inicio		datetime
+	,Dv_recorrente	bit
+	,Vl_recorrencia int
+	,Vl_dias_recorrencia int
 	Constraint pk_id_grupo_evento primary key(Id_grupo_evento)
 	,Constraint fk_Grupo_evento_Grupo_cd_grupo foreign key(Cd_grupo) references Grupo
-	,Constraint fk_Grupo_evento_Evento_cd_evento foreign key(Cd_evento) references Evento
+)
+
+Create Table Evento_sorteado
+(
+	Id_evento_sorteado int identity(1,1)
+	,Id_grupo_evento int not null
+	,Cd_evento int
+	,Dt_evento datetime not null
+	,Constraint PK_Evento_sorteado Primary Key(Id_evento_sorteado)
+	,CONSTRAINT FK_Evento_sorteado_Grupo_evento FOREIGN KEY (Id_grupo_evento) REFERENCES Grupo_evento(Id_grupo_evento)
+	,Constraint fk_Evento_sorteado_cd_evento foreign key(Cd_evento) references Evento(Cd_evento)
 )
