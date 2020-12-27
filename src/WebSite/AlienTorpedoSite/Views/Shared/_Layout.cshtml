@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Home" asp-action="Contato"><span class="glyphicon glyphicon-pencil"></span> Contato</a></li>
                     <li><a asp-controller="Home" asp-action="Sobre"><span class="glyphicon glyphicon-bookmark"></span> Sobre</a></li>
-                    
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a asp-controller="Conta" asp-action="Cadastrar"><span class="glyphicon glyphicon-user"></span> Cadastre-se</a></li>
@@ -41,11 +41,11 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content" style="padding-top: 50px;">
+    <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2017 - AlienTorpedoSite</p>
+        <footer class="footer">
+            <p>&copy; @DateTime.Today.ToString("yyyy") - AlienTorpedoSite</p>
         </footer>
     </div>
 
@@ -71,5 +71,16 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+
+    
+    @*<style>
+            footer {
+                width: 100%;
+                height: 100px;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
+        </style>*@
 </body>
 </html>

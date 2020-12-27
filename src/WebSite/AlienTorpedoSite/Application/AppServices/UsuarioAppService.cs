@@ -23,24 +23,43 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public Retorno AdicionarUsuario(Usuario usuario)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Usuario/CadastraUsuario";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
+            Retorno retorno = new Retorno();
 
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            try
+            {
+                string url = _baseAppService.GetUrl("", "cadastrar_usuario");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PostAsync(url, stringContent).Result;
 
+                var json = response.Content.ReadAsStringAsync();
+                retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            
             return retorno;
         }
 
         public Retorno EditarUsuario(Usuario usuario)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Usuario/EditaUsuario";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PutAsync(url, stringContent).Result;
+            Retorno retorno = new Retorno();
 
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            try
+            {
+                string url = _baseAppService.GetUrl("", "editar_usuario");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PutAsync(url, stringContent).Result;
+
+                var json = response.Content.ReadAsStringAsync();
+                retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
 
             return retorno;            
         }
@@ -51,7 +70,9 @@ namespace AlienTorpedoSite.Application.AppServices
 
             try
             {
-                string url = _baseAppService.GetUrlApi() + String.Format("api/Usuario/AutenticarUsuario?NmEmail={0}&NmSenha={1}", NmEmail, NmSenha);
+                string url = _baseAppService.GetUrl("", "autenticar_usuario");
+                url = url.Replace("{{email}}", NmEmail).Replace("{{senha}}", NmSenha);
+
                 var response = _http.GetAsync(url).Result;
 
                 var json = response.Content.ReadAsStringAsync();
@@ -68,12 +89,21 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public Retorno AlterarStatusUsuario(Usuario usuario)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Usuario/AlteraStatus";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PutAsync(url, stringContent).Result;
+            Retorno retorno = new Retorno();
 
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            try
+            {
+                string url = _baseAppService.GetUrl("", "alterarStatus_usuario");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(usuario), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PutAsync(url, stringContent).Result;
+
+                var json = response.Content.ReadAsStringAsync();
+                retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
 
             return retorno;
         }

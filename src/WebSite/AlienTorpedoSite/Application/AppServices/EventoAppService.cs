@@ -27,49 +27,89 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public List<TipoEvento> ObtemTiposEvento()
         {
-            HttpClient client = new HttpClient();
-            string url = _baseAppService.GetUrlApi() + "api/Evento/ListaTipoEvento";
-            var response = client.GetStringAsync(url);
-            var tipoEventos = JsonConvert.DeserializeObject<List<TipoEvento>>(response.Result);
+            var tipoEventos = new List<TipoEvento>();
+            try
+            {
+                HttpClient client = new HttpClient();
+                string url = _baseAppService.GetUrl("", "listar_tipoEvento");
+                var response = client.GetStringAsync(url);
+                tipoEventos = JsonConvert.DeserializeObject<List<TipoEvento>>(response.Result);
+            }
+            catch(Exception ex)
+            {
+                throw new ApplicationException(ex.Message);
+            }
 
             return tipoEventos;
         }
 
         public string AdicionarTipoEvento(TipoEvento tipoEvento)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Evento/CadastraTipoEvento";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(tipoEvento), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
+            try
+            {
+                string url = _baseAppService.GetUrl("", "cadastrar_tipoEvento");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(tipoEvento), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PostAsync(url, stringContent).Result;
 
-            return response.ToString();
+                return response.ToString();
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
         }
 
         public List<Evento> ObtemListaEventos()
         {
-            string url = _baseAppService.GetUrlApi() + "api/Evento/ListaEventos";
-            var response = _http.GetStringAsync(url);
-            var lstEventos = JsonConvert.DeserializeObject<List<Evento>>(response.Result);
+            var lstEventos = new List<Evento>();
+
+            try
+            {
+                string url = _baseAppService.GetUrl("", "listar_eventos");
+                var response = _http.GetStringAsync(url);
+                lstEventos = JsonConvert.DeserializeObject<List<Evento>>(response.Result);
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
 
             return lstEventos;
         }
 
         public string AdicionarEvento(Evento evento)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Evento/CadastraEvento";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
+            try
+            {
+                string url = _baseAppService.GetUrl("", "cadastrar_evento");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PostAsync(url, stringContent).Result;
 
-            return response.ToString();
+                return response.ToString();
+            }
+            catch(Exception e)
+            {
+               throw new ApplicationException(e.Message);
+            }
         }
 
         public GrupoEventoViewModel SortearEvento(GrupoEvento evento)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Sorteio/Sortear";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
-            
-            var response = _http.PostAsync(url, stringContent).Result;
-            string json = response.Content.ReadAsStringAsync().Result;
-            var retorno = JsonConvert.DeserializeObject<GrupoEventoViewModel>(json);
+            var retorno = new GrupoEventoViewModel();
+
+            try
+            {
+                string url = _baseAppService.GetUrl("", "sortear_evento");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(evento), UnicodeEncoding.UTF8, "application/json");
+
+                var response = _http.PostAsync(url, stringContent).Result;
+                string json = response.Content.ReadAsStringAsync().Result;
+                retorno = JsonConvert.DeserializeObject<GrupoEventoViewModel>(json);
+            }
+            catch(Exception e)
+            {
+                new ApplicationException(e.Message);
+            }
 
             return retorno;
         }

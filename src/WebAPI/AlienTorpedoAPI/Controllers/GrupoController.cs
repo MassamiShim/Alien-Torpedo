@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AlienTorpedoAPI.Models;
+using AlienTorpedoAPI.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace AlienTorpedoAPI.Controllers
 {
@@ -12,10 +10,12 @@ namespace AlienTorpedoAPI.Controllers
     public class GrupoController : Controller
     {
         private readonly dbAlienContext _dbcontext;
+        private readonly IConfiguration _configuration;
 
-        public GrupoController(dbAlienContext dbContext)
+        public GrupoController(dbAlienContext dbContext, IConfiguration configuration)
         {
             _dbcontext = dbContext;
+            _configuration = configuration;
         }
 
         // GET api/Grupo/ListaGrupo
@@ -45,16 +45,11 @@ namespace AlienTorpedoAPI.Controllers
         [HttpPost]
         public JsonResult AtrelarGrupoEvento([FromBody]GrupoEvento group)
         {
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid)            
                 return Json(new { cdretorno = 1, mensagem = "Chamada fora do padrão, favor verificar!" });
-                //return BadRequest();
-            }
 
-            _dbcontext.Add(group);
-            _dbcontext.SaveChanges();
+            EventoRepository.AtrelarEventoAGrupo(group, _configuration);
 
-            //return Ok("Vinculação realizada com sucesso!");
             return Json(new { cdretorno = 0, mensagem = "Vinculação realizada com sucesso!" });            
         }
     }

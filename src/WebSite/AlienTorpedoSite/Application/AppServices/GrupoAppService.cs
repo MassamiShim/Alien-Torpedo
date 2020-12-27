@@ -23,31 +23,55 @@ namespace AlienTorpedoSite.Application.AppServices
 
         public List<Grupo> ListaGrupos()
         {
-            HttpClient client = new HttpClient();
-            string url = _baseAppService.GetUrlApi() + "api/Grupo/ListaGrupo";
-            var response = client.GetStringAsync(url);
-            var lstGrupos = JsonConvert.DeserializeObject<List<Grupo>>(response.Result);
+            var lstGrupos = new List<Grupo>();
+
+            try
+            {
+                string url = _baseAppService.GetUrl("", "listar_grupos");
+                var response = _http.GetStringAsync(url);
+                lstGrupos = JsonConvert.DeserializeObject<List<Grupo>>(response.Result);
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
 
             return lstGrupos;
         }
 
         public string AdicionarGrupo(Grupo grupo)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Grupo/CadastraGrupo";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
+            try
+            {
+                string url = _baseAppService.GetUrl("", "cadastrar_grupos");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PostAsync(url, stringContent).Result;
 
-            return response.ToString();
+                return response.ToString();
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
         }
 
         public Retorno AtrelarGrupoEvento(GrupoEvento grupo)
         {
-            string url = _baseAppService.GetUrlApi() + "api/Grupo/AtrelarGrupoEvento";
-            var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
-            var response = _http.PostAsync(url, stringContent).Result;
+            var retorno = new Retorno();
 
-            var json = response.Content.ReadAsStringAsync();
-            var retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            try
+            {
+                string url = _baseAppService.GetUrl("", "vincular_GrupoEvento");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
+                var response = _http.PostAsync(url, stringContent).Result;
+
+                var json = response.Content.ReadAsStringAsync();
+                retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
 
             return retorno;
         }

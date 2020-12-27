@@ -27,9 +27,7 @@ namespace AlienTorpedoAPI.Models
                     .HasColumnName("Cd_evento");
 
                 entity.Property(e => e.CdTipoEvento).HasColumnName("Cd_tipo_evento");
-
-                entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
-
+                
                 entity.Property(e => e.DvParticular).HasColumnName("Dv_particular");
 
                 entity.Property(e => e.NmEndereco)
@@ -48,11 +46,7 @@ namespace AlienTorpedoAPI.Models
                     .WithMany(p => p.Evento)
                     .HasForeignKey(d => d.CdTipoEvento)
                     .HasConstraintName("fk_Evento_Tipo_evento_cd_tipo_evento");
-
-                entity.HasOne(d => d.CdGrupoNavigation)
-                    .WithMany(p => p.Evento)
-                    .HasForeignKey(d => d.CdGrupo)
-                    .HasConstraintName("fk_Evento_Grupo_cd_grupo");
+                
             });
 
             modelBuilder.Entity<Grupo>(entity =>
@@ -84,6 +78,8 @@ namespace AlienTorpedoAPI.Models
 
                 entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
 
+                entity.Property(e => e.CdEvento).HasColumnName("Cd_evento");
+
                 entity.Property(e => e.DtCadastro)
                     .HasColumnName("Dt_cadastro")
                     .HasColumnType("datetime");
@@ -110,6 +106,12 @@ namespace AlienTorpedoAPI.Models
                     .WithMany(p => p.GrupoEvento)
                     .HasForeignKey(d => d.CdGrupo)
                     .HasConstraintName("fk_grupo_evento_grupo");
+
+                entity.HasOne(d => d.CdEventoNavigation)
+                    .WithMany(p => p.GrupoEvento)
+                    .HasForeignKey(d => d.CdEvento)
+                    .HasConstraintName("fk_Grupo_evento_Evento");
+
             });
 
             modelBuilder.Entity<GrupoUsuario>(entity =>
@@ -191,9 +193,6 @@ namespace AlienTorpedoAPI.Models
 
                 entity.Property(e => e.IdGrupoEvento)
                     .HasColumnName("id_grupo_evento");
-
-                entity.Property(e => e.CdEvento)
-                    .HasColumnName("Cd_evento");
 
                 entity.Property(e => e.DtEvento)
                     .HasColumnName("Dt_evento")

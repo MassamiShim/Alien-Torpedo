@@ -15,10 +15,29 @@ namespace AlienTorpedoSite.Application.AppServices
             _configuration = configuration;
         }
 
-        public string GetUrlApi()
+        public string GetUrl(string externalAPI, string routeName)
         {
-            string urlApi = _configuration.GetValue<string>("Url_AlienTorpedoAPI");
-            return urlApi;
+            string url = string.Empty;
+            string route = string.Empty;
+
+            try
+            {
+                externalAPI = string.IsNullOrWhiteSpace(externalAPI) ? "ExternalAlienAPI" : externalAPI;
+                var routes = _configuration.GetSection(externalAPI).GetChildren().ToDictionary(x => x.Key, y => y.Value);
+
+                routes.TryGetValue("URL_BaseAPI", out url);
+                routes.TryGetValue(routeName, out route);
+
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+
+            return url + route;
+                       
         }
+
+
     }
 }

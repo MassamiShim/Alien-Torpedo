@@ -32,6 +32,7 @@ namespace AlienTorpedoAPI.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int IdGrupoEvento { get; set; }
         public int CdGrupo { get; set; }
+        public int CdEvento { get; set; }
         public string NmDescricao { get; set; }
         public DateTime DtCadastro { get; set; }
         public DateTime DtInicio { get; set; }
@@ -40,5 +41,6 @@ namespace AlienTorpedoAPI.Models
         public int? VlDiasRecorrencia { get; set; }
 
         public virtual Grupo CdGrupoNavigation { get; set; }
+        public virtual Evento CdEventoNavigation { get; set; }
     }
 }

@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AlienTorpedoAPI.Models;
+using AlienTorpedoAPI.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace AlienTorpedoAPI.Controllers
 {
@@ -12,17 +10,19 @@ namespace AlienTorpedoAPI.Controllers
     public class EventoController : Controller
     {
         private readonly dbAlienContext _dbcontext;
+        private readonly IConfiguration _configuration;
 
-        public EventoController(dbAlienContext dbContext)
+        public EventoController(dbAlienContext dbContext,IConfiguration configuration )
         {
             _dbcontext = dbContext;
+            _configuration = configuration;
         }
 
         // GET api/Evento/ListaEventos
         [HttpGet]
         public IActionResult ListaEventos()
         {
-            var TipoEventos = _dbcontext.Evento.ToList();
+            var TipoEventos = EventoRepository.ListarEventos(_configuration);
 
             return Ok(TipoEventos);
         }
@@ -32,13 +32,10 @@ namespace AlienTorpedoAPI.Controllers
         public IActionResult CadastraEvento([FromBody]Evento evento)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            _dbcontext.Add(evento);
-            _dbcontext.SaveChanges();
-
+            EventoRepository.AdicionarEvento(evento, _configuration);
+           
             return Ok("Evento cadastrado com sucesso!");
         }
 

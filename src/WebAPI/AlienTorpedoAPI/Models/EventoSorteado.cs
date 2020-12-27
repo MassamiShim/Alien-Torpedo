@@ -10,17 +10,15 @@ namespace AlienTorpedoAPI.Models
 
         }
 
-        public EventoSorteado(int IdGrupoEvento, int? CdEvento, DateTime DtEvento)
+        public EventoSorteado(int IdGrupoEvento, DateTime DtEvento)
         {
             this.IdGrupoEvento = IdGrupoEvento;
-            this.CdEvento = CdEvento;
             this.DtEvento = DtEvento;
         }
 
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int IdEventoSorteado { get; set; }
         public int IdGrupoEvento { get; set; }
-        public int? CdEvento { get; set; }
         public DateTime DtEvento { get; set; }
     }
 }
