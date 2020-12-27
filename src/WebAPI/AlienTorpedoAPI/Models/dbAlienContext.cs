@@ -28,7 +28,7 @@ namespace AlienTorpedoAPI.Models
 
                 entity.Property(e => e.CdTipoEvento).HasColumnName("Cd_tipo_evento");
 
-                entity.Property(e => e.CdUsuario).HasColumnName("Cd_usuario");
+                entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
 
                 entity.Property(e => e.DvParticular).HasColumnName("Dv_particular");
 
@@ -47,12 +47,12 @@ namespace AlienTorpedoAPI.Models
                 entity.HasOne(d => d.CdTipoEventoNavigation)
                     .WithMany(p => p.Evento)
                     .HasForeignKey(d => d.CdTipoEvento)
-                    .HasConstraintName("fk_evento_tipo_evento");
+                    .HasConstraintName("fk_Evento_Tipo_evento_cd_tipo_evento");
 
-                entity.HasOne(d => d.CdUsuarioNavigation)
+                entity.HasOne(d => d.CdGrupoNavigation)
                     .WithMany(p => p.Evento)
-                    .HasForeignKey(d => d.CdUsuario)
-                    .HasConstraintName("fk_evento_usuario");
+                    .HasForeignKey(d => d.CdGrupo)
+                    .HasConstraintName("fk_Evento_Grupo_cd_grupo");
             });
 
             modelBuilder.Entity<Grupo>(entity =>

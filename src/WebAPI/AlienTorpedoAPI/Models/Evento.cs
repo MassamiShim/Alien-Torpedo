@@ -19,10 +19,10 @@ namespace AlienTorpedoAPI.Models
         public double? VlEvento { get; set; }
         public double? VlNota { get; set; }
         public bool? DvParticular { get; set; }
-        public int? CdUsuario { get; set; }
+        public int? CdGrupo { get; set; }
 
         public virtual ICollection<GrupoEvento> GrupoEvento { get; set; }
         public virtual TipoEvento CdTipoEventoNavigation { get; set; }
-        public virtual Usuario CdUsuarioNavigation { get; set; }
+        public virtual Usuario CdGrupoNavigation { get; set; }
     }
 }
