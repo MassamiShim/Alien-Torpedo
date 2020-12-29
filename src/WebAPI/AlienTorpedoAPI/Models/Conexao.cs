@@ -24,7 +24,7 @@ namespace AlienTorpedoAPI.Models
             }
             catch (Exception erro)
             {
-                throw erro;
+                throw new ApplicationException(erro.Message);
             }
 
             return conexao;

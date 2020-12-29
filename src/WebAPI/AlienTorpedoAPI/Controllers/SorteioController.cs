@@ -17,26 +17,13 @@ namespace AlienTorpedoAPI.Controllers
             _dbcontext = dbContext;
             _configuration = configuration;
         }
-       
-        // POST: api/Sorteio/SortearTodos
-        [HttpPost]
-        public IActionResult SortearTodos([FromBody] Grupo grupo)
-        {
-            SorteioRepository sorteio = new SorteioRepository(_configuration);
-            int resultado = sorteio.GeraSorteioTodos(grupo, _dbcontext);
-
-            if (resultado == 0)
-                return Json(new { cdretorno = 1, mensagem = "Eventos não foram sorteados!" });
-
-            return Json(new { cdretorno = 0, mensagem = "Sucesso!" });
-        }
-
+               
         // POST: api/Sorteio/Sortear
         [HttpPost]
-        public IActionResult Sortear()
+        public IActionResult Sortear([FromBody] Grupo grupo)
         {
             SorteioRepository sorteio = new SorteioRepository(_configuration);
-            int resultado = sorteio.GeraSorteio(_dbcontext);
+            int resultado = sorteio.GeraSorteio(grupo, _dbcontext, _configuration);
 
             if (resultado == 0)
                 return Json(new { cdretorno = 1, mensagem = "Eventos não foram sorteados!" });

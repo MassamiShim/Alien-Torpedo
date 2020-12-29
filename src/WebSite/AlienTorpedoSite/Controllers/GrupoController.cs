@@ -68,7 +68,7 @@ namespace AlienTorpedoSite.Controllers
         public IActionResult AtrelarEvento(GrupoEvento grupo)
         {
             if(!ModelState.IsValid)
-                return View();
+                return View(grupo);
 
             var retorno = _grupoAppService.AtrelarGrupoEvento(grupo);
             
@@ -79,6 +79,10 @@ namespace AlienTorpedoSite.Controllers
 
                 TempData["Mensagem"] = retorno.mensagem;
                 TempData["Codigo"] = retorno.cdretorno;
+
+                if (retorno.cdretorno == 1)
+                    return View(grupo);
+
             }
           
             return RedirectToAction("AtrelarEvento");

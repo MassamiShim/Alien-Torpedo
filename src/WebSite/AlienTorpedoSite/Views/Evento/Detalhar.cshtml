@@ -4,40 +4,40 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
+<div class="col-md-12">
 
-<br />
-<br />
-<div class="panel panel-primary" style="border-color: black;">
-    <div class="panel-heading" style="background: black;">
-        <h3 class="panel-title">Eventos</h3>
-    </div>
-    <div class="panel-body">
-        <table class="table table-striped" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th style="width: 10%; text-align:center">Código</th>
-                    <th style="width: 30%;">Evento</th>
-                    <th style="width: 20%;">Endereço</th>
-                    <th style="width: 20%;">Particular</th>
-                    <th style="width: 10%;">Peso</th>
-                    <th style="width: 10%;">Nota</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var evento in @Model)
-                {
-                    string strParticular = @evento.DvParticular == true ? "Sim" : "Não";
+    <div class="panel panel-primary" style="border-color: black;">
+        <div class="panel-heading" style="background: black;">
+            <h3 class="panel-title">Eventos</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width: 10%; text-align:center">Código</th>
+                        <th style="width: 30%;">Evento</th>
+                        <th style="width: 20%;">Endereço</th>
+                        <th style="width: 20%;">Particular</th>
+                        <th style="width: 10%;">Peso</th>
+                        <th style="width: 10%;">Nota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var evento in @Model)
+                    {
+                        string strParticular = @evento.DvParticular == true ? "Sim" : "Não";
 
-                <tr>
-                    <td style="text-align:center; padding-left:0px;">@evento.CdEvento</td>
-                    <td>@evento.NmEvento</td>
-                    <td>@evento.NmEndereco</td>
-                    <td>@strParticular</td>
-                    <td>@evento.VlEvento</td>
-                    <td>@evento.VlNota</td>
-                </tr>
-                }
-            </tbody>
-        </table>
+                        <tr>
+                            <td style="text-align:center; padding-left:0px;">@evento.CdEvento</td>
+                            <td>@evento.NmEvento</td>
+                            <td>@evento.NmEndereco</td>
+                            <td>@strParticular</td>
+                            <td>@evento.VlEvento</td>
+                            <td>@evento.VlNota</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -21,12 +21,12 @@ namespace AlienTorpedoAPI.Repositories
                     string command = @"
                                     INSERT INTO Evento
                                     (
-                                         Cd_tipo_evento
-                                        ,Nm_evento
-                                        ,Nm_endereco
-                                        ,Vl_evento
-                                        ,Vl_nota
-                                        ,Dv_particular
+                                         CdTipoEvento
+                                        ,NmEvento
+                                        ,NmEndereco
+                                        ,VlEvento
+                                        ,VlNota
+                                        ,DvParticular
                                     )
                                     VALUES
                                     (
@@ -50,16 +50,7 @@ namespace AlienTorpedoAPI.Repositories
 
         public static List<Evento> ListarEventos(IConfiguration configuration)
         {
-            string command = @"
-                                SELECT
-	                                 CdEvento =Cd_evento
-	                                ,CdTipoEvento = Cd_tipo_evento
-	                                ,NmEvento = Nm_evento
-	                                ,NmEndereco = Nm_endereco
-	                                ,VlEvento = Vl_evento
-	                                ,VlNota = Vl_nota
-	                                ,DvParticular = Dv_particular
-                                FROM Evento(NOLOCK) ";
+            string command = @"SELECT * FROM Evento(NOLOCK) ";
 
             try
             {
@@ -77,6 +68,26 @@ namespace AlienTorpedoAPI.Repositories
             }
         }
 
+        public static GrupoEvento ObtemGrupoEvento(int CdGrupo, int CdEvento, IConfiguration configuration)
+        {
+            try
+            {
+                string command = @" select * from GrupoEvento(NOLOCK) where CdGrupo = @CdGrupo and CdEvento = @CdEvento";
+
+                Conexao conexao = new Conexao(configuration);
+
+                using (var conn = conexao.GetConexao())
+                {
+                    var grupoEvento = conn.Query<GrupoEvento>(command, new { CdGrupo, CdEvento }).FirstOrDefault();
+                    return grupoEvento;
+                }
+            }
+            catch(Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+        }
+
         public static void AtrelarEventoAGrupo(GrupoEvento evento, IConfiguration configuration)
         {
             try
@@ -87,18 +98,18 @@ namespace AlienTorpedoAPI.Repositories
                 using (var conn = conexao.GetConexao())
                 {
                     string command = @"
-                                    IF NOT EXISTS(SELECT 1 FROM Grupo_evento where Cd_grupo = @CdGrupo and Cd_evento = @CdEvento)
+                                    IF NOT EXISTS(SELECT 1 FROM GrupoEvento where CdGrupo = @CdGrupo and CdEvento = @CdEvento)
                                     BEGIN
-                                        INSERT INTO Grupo_evento
+                                        INSERT INTO GrupoEvento
                                         (
-                                             Cd_grupo
-                                            ,Cd_evento
-                                            ,Nm_descricao
-                                            ,Dt_cadastro
-                                            ,Dt_inicio
-                                            ,Dv_recorrente
-                                            ,Vl_recorrencia
-                                            ,Vl_dias_recorrencia
+                                             CdGrupo
+                                            ,CdEvento
+                                            ,NmDescricao
+                                            ,DtCadastro
+                                            ,DtInicio
+                                            ,DvRecorrente
+                                            ,VlRecorrencia
+                                            ,VlDiasRecorrencia
                                         )
                                         VALUES
                                         (

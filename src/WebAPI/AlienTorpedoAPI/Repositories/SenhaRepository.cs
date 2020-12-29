@@ -47,7 +47,7 @@ namespace AlienTorpedoAPI.Repositories
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new ApplicationException(ex.Message);
             }
 
             return sb.ToString();

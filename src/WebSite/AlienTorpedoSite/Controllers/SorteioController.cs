@@ -29,7 +29,7 @@ namespace AlienTorpedoSite.Controllers
             var lstEventos = _eventoAppService.ObtemListaEventos();
 
             ViewBag.ListaGrupos = lstGrupos.Select(g => new SelectListItem() { Text = g.NmGrupo, Value = g.CdGrupo.ToString() });
-            ViewBag.ListaEventos = lstEventos.Select(e => new SelectListItem() { Text = e.NmEvento, Value = e.CdEvento.Value.ToString() });
+            //ViewBag.ListaEventos = lstEventos.Select(e => new SelectListItem() { Text = e.NmEvento, Value = e.CdEvento.Value.ToString() });
 
             return View();
         }

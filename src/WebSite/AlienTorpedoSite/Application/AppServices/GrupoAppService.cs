@@ -70,6 +70,8 @@ namespace AlienTorpedoSite.Application.AppServices
             }
             catch(Exception e)
             {
+                retorno.cdretorno = 1;
+                retorno.mensagem = "Erro ao tentar atrelar grupo a evento.";
                 throw new ApplicationException(e.Message);
             }
 
