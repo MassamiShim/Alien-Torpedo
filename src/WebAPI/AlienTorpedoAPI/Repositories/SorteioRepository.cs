@@ -53,6 +53,27 @@ namespace AlienTorpedoAPI.Repositories
             }
             return 0;
         }
+
+        public List<dynamic> ListarEventosSorteados(IConfiguration configuration)
+        {
+            String sommand = @"Select g.NmGrupo, NmEvento, NmEndereco, es.DtEvento
+                            From Evento e(nolock)
+                            join GrupoEvento ge(nolock) on
+	                            ge.CdEvento = e.CdEvento
+                            join EventoSorteado es(nolock) on
+	                            ge.IdGrupoEvento = es.IdEventoSorteado
+                            join Grupo g on 
+	                            ge.CdGrupo = g.CdGrupo 
+                            order by DtEvento desc ";
+
+            Conexao conexao = new Conexao(_configuration);
+
+            using(var conn = conexao.GetConexao())
+            {
+                return conn.Query<dynamic>(sommand).ToList();
+            }
+        }
+
         public int GeraSorteio(Grupo grupo, dbAlienContext dbContext, IConfiguration configuration)
         {
             int resultado = 0;
@@ -103,6 +124,8 @@ namespace AlienTorpedoAPI.Repositories
 
             dbContext.EventoSorteado.Add(eventoSorteado);
             dbContext.GrupoEvento.Update(vargrupoEvento);
+
+            int id = eventoSorteado.IdEventoSorteado;
 
             dbContext.SaveChanges();
         }

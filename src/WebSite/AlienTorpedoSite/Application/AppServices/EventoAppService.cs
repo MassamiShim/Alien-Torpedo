@@ -59,6 +59,24 @@ namespace AlienTorpedoSite.Application.AppServices
             }
         }
 
+        public List<GrupoEvento> ListarEventosSorteados()
+        {
+            var lstEventos = new List<GrupoEvento>();
+
+            try
+            {
+                string url = _baseAppService.GetUrl("", "listar_eventos_sorteados");
+                var response = _http.GetStringAsync(url);
+                lstEventos = JsonConvert.DeserializeObject<List<GrupoEvento>>(response.Result);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+
+            return lstEventos;
+        }
+
         public List<Evento> ObtemListaEventos()
         {
             var lstEventos = new List<Evento>();

@@ -51,7 +51,9 @@ namespace AlienTorpedoSite.Controllers
         [HttpGet]
         public IActionResult Detalhar()
         {
-            return View();
+            List<GrupoEvento> eventos = _eventoAppService.ListarEventosSorteados();
+        
+            return View(eventos);
         }
     }
 }

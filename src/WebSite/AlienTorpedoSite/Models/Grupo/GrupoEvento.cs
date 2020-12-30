@@ -21,5 +21,6 @@ namespace AlienTorpedoSite.Models.Grupo
         public DateTime? DtEvento { get; set; }
         public string NmEndereco { get; set; }
         public double? VlEvento { get; set; }
+        public string NmGrupo { get; set; }
     }
 }
