@@ -8,6 +8,7 @@ using System;
 using AlienTorpedoSite.Application.AppServices;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace AlienTorpedoSite.Controllers
 {
@@ -46,101 +47,75 @@ namespace AlienTorpedoSite.Controllers
         }
 
         public IActionResult AtrelarEvento()
-        {      
-            var lstGrupos = _grupoAppService.ListaGrupos();
-            var lstEventos = _eventoAppService.ObtemListaEventos();
+        {
+            //var lstGrupos = _grupoAppService.ListaGrupos();
+            //var lstEventos = _eventoAppService.ObtemListaEventos();
 
-            ViewBag.ListaGrupos = lstGrupos.Select(g => new SelectListItem() { Text = g.NmGrupo, Value = g.CdGrupo.ToString() });
-            ViewBag.ListaEventos = lstEventos.Select(e => new SelectListItem() { Text = e.NmEvento, Value = e.CdEvento.ToString() });
+            //ViewBag.ListaGrupos = lstGrupos.Select(g => new SelectListItem() { Text = g.NmGrupo, Value = g.CdGrupo.ToString() });
+            //ViewBag.ListaEventos = lstEventos.Select(e => new SelectListItem() { Text = e.NmEvento, Value = e.CdEvento.ToString() });
 
-            object cdRetorno;
-            object strRetorno;
-            TempData.TryGetValue("Codigo", out cdRetorno);
-            TempData.TryGetValue("Mensagem", out strRetorno);
+            Util carregamentoCombo = ObtemComboGruposEventos();
+            ViewBag.ListaGrupos = carregamentoCombo.ListaGrupos;
+            ViewBag.ListaEventos = carregamentoCombo.ListaEventos;
 
-            ViewBag.Codigo = cdRetorno != null ? (int)cdRetorno : 0;
-            ViewBag.Mensagem = strRetorno != null ? strRetorno.ToString() : null;
+            //object cdRetorno;
+            //object strRetorno;
+            //TempData.TryGetValue("Codigo", out cdRetorno);
+            //TempData.TryGetValue("Mensagem", out strRetorno);
+
+            //ViewBag.Codigo = cdRetorno != null ? (int)cdRetorno : 0;
+            //ViewBag.Mensagem = strRetorno != null ? strRetorno.ToString() : null;
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult AtrelarEvento(GrupoEvento grupo)
+        public async Task<IActionResult> AtrelarEvento(GrupoEvento grupo)
         {
-            if(!ModelState.IsValid)
-                return View(grupo);
+            //Recarrega os combos
+            Util carregamentoCombo = ObtemComboGruposEventos();
 
-            var retorno = _grupoAppService.AtrelarGrupoEvento(grupo);
+            if (!ModelState.IsValid)
+            {    
+                ViewBag.ListaGrupos = carregamentoCombo.ListaGrupos;
+                ViewBag.ListaEventos = carregamentoCombo.ListaEventos;
+                
+                return View(grupo);
+            }
+                
+            var retorno = await _grupoAppService.AtrelarGrupoEvento(grupo);
             
             if(retorno != null)
             {
                 ViewBag.Codigo = retorno.cdretorno;
                 ViewBag.Mensagem = retorno.mensagem;
+                ViewBag.ListaGrupos = carregamentoCombo.ListaGrupos;
+                ViewBag.ListaEventos = carregamentoCombo.ListaEventos;
 
                 TempData["Mensagem"] = retorno.mensagem;
                 TempData["Codigo"] = retorno.cdretorno;
 
                 if (retorno.cdretorno == 1)
                     return View(grupo);
-
             }
           
             return RedirectToAction("AtrelarEvento");
 
         }
 
-        public IActionResult btnSorteio(GrupoViewModel grupoViewModel)
+        private Util ObtemComboGruposEventos()
         {
-            GrupoEvento grupoEvento = new GrupoEvento
-            {
-                IdGrupoEvento = 1
-            };
+            Util util = new Util();
+            var lstGrupos = _grupoAppService.ListaGrupos();
+            var lstEventos = _eventoAppService.ObtemListaEventos();
+            
+            util.ListaGrupos = lstGrupos.Select(g => new SelectListItem() { Text = g.NmGrupo, Value = g.CdGrupo.ToString() });
+            util.ListaEventos = lstEventos.Select(e => new SelectListItem() { Text = e.NmEvento, Value = e.CdEvento.ToString() });
 
-            //Chamando API para cadastrar o usuário na base 
-            using (HttpClient client = new HttpClient())
-            {
-                //Setando endereço da API
-                client.BaseAddress = new System.Uri("http://localhost:51889/api/sorteio");
-                //Limpando header
-                client.DefaultRequestHeaders.Accept.Clear();
-                //Adicionando um novo header do tipo JSON
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                //Transformando obj Usuario em uma string
-                string stringData = JsonConvert.SerializeObject(grupoEvento);
-
-                //Transformando string em um arquivo do tipo JSON
-                var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-
-                //Chamando API passando o arquivo JSON
-                HttpResponseMessage response = client.PostAsync("http://localhost:51889/api/sorteio", contentData).Result;
-
-                //Passando retorno da API para uma string
-                string retorno = response.Content.ReadAsStringAsync().Result;
-
-                //Fragmentando retorno do arquivo json 
-                dynamic resultado = JsonConvert.DeserializeObject(retorno);
-
-                //Enviando retorno para a tela
-
-                ViewBag.grupoEvento = resultado.resultado[0].IdGrupoEvento;
-                ViewBag.cdGrupo = resultado.resultado[0].CdGrupo;
-                ViewBag.dtEvento = resultado.resultado[0].DtEvento;
-                ViewBag.nmEvento = resultado.resultado[0].NmEvento;
-                ViewBag.nmEndereco = resultado.resultado[0].NmEndereco;
-                ViewBag.vlEvento = resultado.resultado[0].VlEvento;
-
-                GrupoViewModel viewModel = new GrupoViewModel
-                {
-                    IdGrupoEvento = resultado.resultado[0].IdGrupoEvento,
-                    cdGrupo = resultado.resultado[0].CdGrupo,
-                    dtEvento = resultado.resultado[0].DtEvento,
-                    nmEvento = resultado.resultado[0].NmEvento,
-                    nmEndereco = resultado.resultado[0].NmEndereco,
-                    vlEvento = resultado.resultado[0].VlEvento
-                };
-                return View(viewModel);
-            }
+            return util;
         }
+
+
+       
     }
 }

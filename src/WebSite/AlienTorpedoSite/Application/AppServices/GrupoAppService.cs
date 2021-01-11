@@ -55,15 +55,17 @@ namespace AlienTorpedoSite.Application.AppServices
             }
         }
 
-        public Retorno AtrelarGrupoEvento(GrupoEvento grupo)
+        public async Task<Retorno> AtrelarGrupoEvento(GrupoEvento grupo)
         {
             var retorno = new Retorno();
 
             try
             {
                 string url = _baseAppService.GetUrl("", "vincular_GrupoEvento");
-                var stringContent = new StringContent(JsonConvert.SerializeObject(grupo), UnicodeEncoding.UTF8, "application/json");
-                var response = _http.PostAsync(url, stringContent).Result;
+
+                HttpClient http = new HttpClient();                
+                StringContent stringContent = new StringContent(content: JsonConvert.SerializeObject(grupo), encoding: UnicodeEncoding.UTF8, mediaType: "application/json");
+                HttpResponseMessage response = await http.PostAsync(url, stringContent);
 
                 var json = response.Content.ReadAsStringAsync();
                 retorno = JsonConvert.DeserializeObject<Retorno>(json.Result);
