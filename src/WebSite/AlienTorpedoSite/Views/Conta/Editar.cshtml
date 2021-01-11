@@ -4,8 +4,8 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-<br /><br />
-<form asp-action="Editar" asp-route-Cd_usuario="@Model.Cd_usuario">
+
+<form asp-action="Editar" class="col-md-12" asp-route-Cd_usuario="@Model.Cd_usuario">
     <div class="panel panel-primary" style="border: black;">
         <div class="panel-heading" style="background: black; color: white;">
             <h3 class="panel-title">Abaixo as informações que podem ser editadas:</h3>

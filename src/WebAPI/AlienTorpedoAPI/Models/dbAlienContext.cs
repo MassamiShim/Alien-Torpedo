@@ -6,10 +6,8 @@ namespace AlienTorpedoAPI.Models
 {
     public partial class dbAlienContext : DbContext
     {
-        //Vinicius - Construtur para setar a connectionString no dbcontext - INI 
         public dbAlienContext(DbContextOptions<dbAlienContext> options) : base(options)
         { }
-        //Vinicius - Construtur para setar a connectionString no dbcontext - FIM
 
         public virtual DbSet<Evento> Evento { get; set; }
         public virtual DbSet<Grupo> Grupo { get; set; }
@@ -17,161 +15,188 @@ namespace AlienTorpedoAPI.Models
         public virtual DbSet<GrupoUsuario> GrupoUsuario { get; set; }
         public virtual DbSet<TipoEvento> TipoEvento { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-
+        public virtual DbSet<EventoSorteado> EventoSorteado { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Evento>(entity =>
             {
                 entity.HasKey(e => e.CdEvento)
-                    .HasName("pk_cd_evento");
+                    .HasName("pk_Evento");
 
                 entity.Property(e => e.CdEvento)
-                    .HasColumnName("Cd_evento");
+                    .HasColumnName("CdEvento");
 
-                entity.Property(e => e.CdTipoEvento).HasColumnName("Cd_tipo_evento");
-
-                entity.Property(e => e.CdUsuario).HasColumnName("Cd_usuario");
-
-                entity.Property(e => e.DvParticular).HasColumnName("Dv_particular");
+                entity.Property(e => e.CdTipoEvento).HasColumnName("CdTipoEvento");
+                
+                entity.Property(e => e.DvParticular).HasColumnName("DvParticular");
 
                 entity.Property(e => e.NmEndereco)
-                    .HasColumnName("Nm_endereco")
+                    .HasColumnName("NmEndereco")
                     .HasColumnType("varchar(100)");
 
                 entity.Property(e => e.NmEvento)
-                    .HasColumnName("Nm_evento")
+                    .HasColumnName("NmEvento")
                     .HasColumnType("varchar(60)");
 
-                entity.Property(e => e.VlEvento).HasColumnName("Vl_evento");
+                entity.Property(e => e.VlEvento).HasColumnName("VlEvento");
 
-                entity.Property(e => e.VlNota).HasColumnName("Vl_nota");
+                entity.Property(e => e.VlNota).HasColumnName("VlNota");
 
                 entity.HasOne(d => d.CdTipoEventoNavigation)
                     .WithMany(p => p.Evento)
                     .HasForeignKey(d => d.CdTipoEvento)
-                    .HasConstraintName("fk_evento_tipo_evento");
-
-                entity.HasOne(d => d.CdUsuarioNavigation)
-                    .WithMany(p => p.Evento)
-                    .HasForeignKey(d => d.CdUsuario)
-                    .HasConstraintName("fk_evento_usuario");
+                    .HasConstraintName("fk_Evento_TipoEvento");
+                
             });
 
             modelBuilder.Entity<Grupo>(entity =>
             {
                 entity.HasKey(e => e.CdGrupo)
-                    .HasName("pk_cd_grupo");
+                    .HasName("pk_Grupo");
 
                 entity.Property(e => e.CdGrupo)
-                    .HasColumnName("Cd_grupo");
+                    .HasColumnName("CdGrupo");
 
                 entity.Property(e => e.DtInclusao)
-                    .HasColumnName("Dt_inclusao")
+                    .HasColumnName("DtInclusao")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.NmGrupo)
-                    .HasColumnName("Nm_grupo")
+                    .HasColumnName("NmGrupo")
                     .HasColumnType("varchar(60)");
             });
 
             modelBuilder.Entity<GrupoEvento>(entity =>
             {
                 entity.HasKey(e => e.IdGrupoEvento)
-                    .HasName("pk_id_grupo_evento");
+                    .HasName("pk_GrupoEvento");
 
-                entity.ToTable("Grupo_evento");
+                entity.ToTable("GrupoEvento");
 
                 entity.Property(e => e.IdGrupoEvento)
-                    .HasColumnName("Id_grupo_evento");
+                    .HasColumnName("IdGrupoEvento");
 
-                entity.Property(e => e.CdEvento).HasColumnName("Cd_evento");
+                entity.Property(e => e.CdGrupo).HasColumnName("CdGrupo");
 
-                entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
+                entity.Property(e => e.CdEvento).HasColumnName("CdEvento");
 
-                entity.Property(e => e.DtEvento)
-                    .HasColumnName("Dt_evento")
+                entity.Property(e => e.DtCadastro)
+                    .HasColumnName("DtCadastro")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DtInicio)
+                    .HasColumnName("DtInicio")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.NmDescricao)
-                    .HasColumnName("Nm_descricao")
+                    .HasColumnName("NmDescricao")
                     .HasColumnType("varchar(80)");
 
-                entity.HasOne(d => d.CdEventoNavigation)
-                    .WithMany(p => p.GrupoEvento)
-                    .HasForeignKey(d => d.CdEvento)
-                    .HasConstraintName("fk_grupo_evento_evento");
+                entity.Property(e => e.DvRecorrente)
+                    .HasColumnName("DvRecorrente")
+                    .HasColumnType("bit");
+
+                entity.Property(e => e.VlRecorrencia)
+                    .HasColumnName("VlRecorrencia");
+
+                entity.Property(e => e.VlDiasRecorrencia)
+                    .HasColumnName("VlDiasRecorrencia");
 
                 entity.HasOne(d => d.CdGrupoNavigation)
                     .WithMany(p => p.GrupoEvento)
                     .HasForeignKey(d => d.CdGrupo)
-                    .HasConstraintName("fk_grupo_evento_grupo");
+                    .HasConstraintName("fk_GrupoEvento_Grupo");
+
+                entity.HasOne(d => d.CdEventoNavigation)
+                    .WithMany(p => p.GrupoEvento)
+                    .HasForeignKey(d => d.CdEvento)
+                    .HasConstraintName("fk_GrupoEvento_Evento");
+
             });
 
             modelBuilder.Entity<GrupoUsuario>(entity =>
             {
                 entity.HasKey(e => new { e.CdUsuario, e.CdGrupo })
-                    .HasName("pk_cd_usuario_grupo");
+                    .HasName("pk_GrupoUsuario");
 
-                entity.ToTable("Grupo_usuario");
+                entity.ToTable("GrupoUsuario");
 
-                entity.Property(e => e.CdUsuario).HasColumnName("Cd_usuario");
+                entity.Property(e => e.CdUsuario).HasColumnName("CdUsuario");
 
-                entity.Property(e => e.CdGrupo).HasColumnName("Cd_grupo");
+                entity.Property(e => e.CdGrupo).HasColumnName("CdGrupo");
 
-                entity.Property(e => e.NrVoto).HasColumnName("Nr_voto");
+                entity.Property(e => e.NrVoto).HasColumnName("NrVoto");
 
                 entity.HasOne(d => d.CdGrupoNavigation)
                     .WithMany(p => p.GrupoUsuario)
                     .HasForeignKey(d => d.CdGrupo)
                     .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("fk_cd_grupo");
+                    .HasConstraintName("fk_GrupoUsuario_Grupo");
 
                 entity.HasOne(d => d.CdUsuarioNavigation)
                     .WithMany(p => p.GrupoUsuario)
                     .HasForeignKey(d => d.CdUsuario)
                     .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("fk_cd_usuario");
+                    .HasConstraintName("fk_GrupoUsuario_Usuario");
             });
 
             modelBuilder.Entity<TipoEvento>(entity =>
             {
                 entity.HasKey(e => e.CdTipoEvento)
-                    .HasName("pk_cd_tipo_evento");
+                    .HasName("pk_TipoEvento");
 
-                entity.ToTable("Tipo_evento");
+                entity.ToTable("TipoEvento");
 
                 entity.Property(e => e.CdTipoEvento)
-                    .HasColumnName("Cd_tipo_evento");
+                    .HasColumnName("CdTipoEvento");
 
                 entity.Property(e => e.NmTipoEvento)
-                    .HasColumnName("Nm_tipo_evento")
+                    .HasColumnName("NmTipoEvento")
                     .HasColumnType("varchar(60)");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.CdUsuario)
-                    .HasName("pk_cd_usuario");
+                    .HasName("pk_Usuario");
 
-                entity.Property(e => e.CdUsuario).HasColumnName("Cd_usuario");
+                entity.Property(e => e.CdUsuario).HasColumnName("CdUsuario");
 
                 entity.Property(e => e.DtInclusao)
-                    .HasColumnName("Dt_inclusao")
+                    .HasColumnName("DtInclusao")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.DvAtivo).HasColumnName("Dv_ativo");
+                entity.Property(e => e.DvAtivo).HasColumnName("DvAtivo");
 
                 entity.Property(e => e.NmEmail)
-                    .HasColumnName("Nm_email")
+                    .HasColumnName("NmEmail")
                     .HasColumnType("varchar(80)");
 
                 entity.Property(e => e.NmSenha)
-                    .HasColumnName("Nm_senha")
+                    .HasColumnName("NmSenha")
                     .HasColumnType("varchar(20)");
 
                 entity.Property(e => e.NmUsuario)
-                    .HasColumnName("Nm_usuario")
+                    .HasColumnName("NmUsuario")
                     .HasColumnType("varchar(80)");
+            });
+
+            modelBuilder.Entity<EventoSorteado>(entity =>
+            {
+                entity.HasKey(e => e.IdEventoSorteado)
+                    .HasName("IdEventoSorteado");
+
+                entity.ToTable("EventoSorteado");
+
+                entity.Property(e => e.IdEventoSorteado)
+                    .HasColumnName("IdEventoSorteado");
+
+                entity.Property(e => e.IdGrupoEvento)
+                    .HasColumnName("IdGrupoEvento");
+
+                entity.Property(e => e.DtEvento)
+                    .HasColumnName("DtEvento")
+                    .HasColumnType("datetime");
             });
         }
     }

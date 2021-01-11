@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AlienTorpedoAPI;
 using AlienTorpedoAPI.Models;
 
-namespace AlienTorpedoAPI.Classes
+namespace AlienTorpedoAPI.Repositories
 {
-    public static class Senha
+    public static class SenhaRepository
     {
         public static int AlteraSenha(int CdUsuario, string NovaSenha, dbAlienContext dbcontext)
         {
@@ -47,7 +47,7 @@ namespace AlienTorpedoAPI.Classes
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new ApplicationException(ex.Message);
             }
 
             return sb.ToString();

@@ -1,10 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace AlienTorpedoAPI.Models
 {
@@ -28,7 +24,7 @@ namespace AlienTorpedoAPI.Models
             }
             catch (Exception erro)
             {
-                throw erro;
+                throw new ApplicationException(erro.Message);
             }
 
             return conexao;

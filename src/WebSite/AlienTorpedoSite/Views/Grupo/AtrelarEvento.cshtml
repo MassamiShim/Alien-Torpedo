@@ -4,8 +4,8 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-<br /><br />
-<form asp-action="AtrelarEvento">
+
+<form asp-action="AtrelarEvento" class="col-md-12">
     <div class="panel panel-primary" style="border-color: black;">
         <div class="panel-heading" style="background: black;">
             <h3 class="panel-title">Atrelar Evento a um Grupo</h3>
@@ -24,10 +24,10 @@
 
                 </div>
                 <div class="form-group">
-                    <label asp-for="NmEvento" class="col-md-1 control-label"></label>
+                    <label asp-for="NmDescricao" class="col-md-1 control-label"></label>
                     <div class="col-md-3">
-                        <input asp-for="NmEvento" type="text" class="form-control col-lg-2" placeholder="Descrição" required />
-                        <span asp-validation-for="NmEvento" class="text-danger"></span>
+                        <input asp-for="NmDescricao" type="text" class="form-control col-lg-2" placeholder="Descrição" required />
+                        <span asp-validation-for="NmDescricao" class="text-danger"></span>
                     </div>
                     <label asp-for="DtEvento" class="col-md-2 control-label"></label>
                     <div class="col-md-3">

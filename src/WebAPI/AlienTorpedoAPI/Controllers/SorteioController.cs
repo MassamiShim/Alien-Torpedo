@@ -1,12 +1,12 @@
-using AlienTorpedoAPI.Classes;
 using AlienTorpedoAPI.Models;
+using AlienTorpedoAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace AlienTorpedoAPI.Controllers
 {
-    [Produces("application/json")]
+    //[Produces("application/json")]
     [Route("api/[controller]/[Action]")]
     public class SorteioController : Controller
     {
@@ -18,34 +18,27 @@ namespace AlienTorpedoAPI.Controllers
             _dbcontext = dbContext;
             _configuration = configuration;
         }
-
+               
         // POST: api/Sorteio/Sortear
         [HttpPost]
-        public IActionResult Sortear([FromBody] GrupoEvento grupoEvento)
+        public IActionResult Sortear([FromBody] Grupo grupo)
         {
-            Sorteio sorteio = new Sorteio(_configuration);
-            int cdEvento = sorteio.GeraSorteio(grupoEvento, _dbcontext);
-            var result = new List<GrupoEventoViewModel>();
-
-            if (cdEvento == 0)
-                return Json(new { cdretorno = 1, mensagem = "O evento selecionado não está atrelado a este grupo!", data = result });
-
-            result = sorteio.BuscaSorteio(_dbcontext, grupoEvento);
-
-            return Json(new { cdretorno = 0, mensagem = "Sucesso!", data = result });
-        }
-
-        // POST: api/Sorteio/SortearTodos
-        [HttpPost]
-        public IActionResult SortearTodos([FromBody] Grupo grupo)
-        {
-            Sorteio sorteio = new Sorteio(_configuration);
-            int resultado = sorteio.GeraSorteioTodos(grupo, _dbcontext);
+            SorteioRepository sorteio = new SorteioRepository(_configuration);
+            int resultado = sorteio.GeraSorteio(grupo, _dbcontext, _configuration);
 
             if (resultado == 0)
-                return Json(new { cdretorno = 1, mensagem = "Eventos não foram sorteados!" });
+                return Json(new { cdretorno = 1, mensagem = "Ocorreu um erro ao tentar sortear os eventos!" });
 
-            return Json(new { cdretorno = 0, mensagem = "Sucesso!" });
+            return Json(new { cdretorno = 0, mensagem = "Eventos sorteados com sucesso!" });
+        }
+
+        [HttpGet]
+        public IActionResult ListarEventosSorteados()
+        {
+            SorteioRepository sorteio = new SorteioRepository(_configuration);
+            List<dynamic> eventos = sorteio.ListarEventosSorteados(_configuration);
+
+            return Json(eventos);
         }
     }
 }

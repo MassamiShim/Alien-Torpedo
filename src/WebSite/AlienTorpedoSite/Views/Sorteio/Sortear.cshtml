@@ -4,8 +4,7 @@
     <!-- Informando layout a ser utilizado caso o user esteja logado -->
     Layout = "_Layout_logado";
 }
-<br />
-<br />
+<div class="col-md-12">
     <div class="panel panel-primary" style="border-color: black;">
         <div class="panel-heading" style="background: black;">
             <h3 class="panel-title">Sortear Evento</h3>
@@ -17,12 +16,12 @@
                     <div class="col-md-3">
                         <select asp-for="CdGrupo" class="form-control col-lg-2" asp-items="ViewBag.ListaGrupos"></select>
                     </div>
-                    <label class="col-md-2 control-label">Evento</label>
+                    @*<label class="col-md-2 control-label">Evento</label>
                     <div class="col-md-3">
                         <select asp-for="IdGrupoEvento" class="form-control col-lg-2" asp-items="ViewBag.ListaEventos"></select>
-                    </div>
+                    </div>*@
                 </div>
-                <div id="frmResultSorteio"></div>                
+                <div id="frmResultSorteio"></div>
             </div>
         </div>
         <div class="panel-footer">
@@ -32,6 +31,8 @@
             </div>
         </div>
     </div>
+</div>
+   
 
     <script>
 
